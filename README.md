@@ -1,6 +1,6 @@
-# KIV Industrial
+# KIV Industrial Parts
 
-Minimal sourcing request site for Kunjs Industrial Vault. The site keeps the experience focused on a single sourcing form so prospects can quickly tell you which part they need, how many, and how quickly they need it.
+Minimal sourcing request site for Kunj's Industrial Vault. The site keeps the experience focused on a single sourcing form so prospects can quickly tell you which part they need, how many, and how quickly they need it.
 
 ## Stack
 - Next.js 16 (App Router, TypeScript)

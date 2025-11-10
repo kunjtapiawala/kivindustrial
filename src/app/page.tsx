@@ -19,13 +19,13 @@ const Home = () => {
         <section className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-24" id="hero">
           <div className="space-y-6 text-center sm:text-left">
             <span className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">
-              Kunjs Industrial Vault
+              Kunj's Industrial Vault
             </span>
             <h1 className="text-3xl font-semibold tracking-tight text-primary sm:text-5xl">
               Source the industrial parts you need without the wait.
           </h1>
             <p className="text-base text-muted sm:max-w-xl">
-              KIV Industrial connects you with a $5B+ supplier network spanning more than 3 million ready-to-ship parts. Same-day or next-day fulfillment is the norm—and we keep lead times near zero for most requests.
+              KIV Industrial Parts connects you with a $5B+ supplier network spanning more than 3 million ready-to-ship items. Same-day or next-day fulfillment is the norm—and we keep lead times near zero for most requests.
             </p>
             <p className="rounded-xl border border-accent/20 bg-accent/10 px-4 py-3 text-sm text-primary sm:max-w-lg">
               Due to demand, we are currently accepting sourcing orders of $2,500 USD or greater. Need support on a smaller project? Reach out and we will queue you as capacity opens.
@@ -41,7 +41,7 @@ const Home = () => {
                 href="#about"
                 className="rounded-full border border-white/10 px-6 py-3 text-center text-sm font-semibold text-primary transition hover:border-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               >
-                Why KIV Industrial
+                Why KIV Industrial Parts
               </a>
             </div>
             <p className="text-sm text-muted">
@@ -62,7 +62,7 @@ const Home = () => {
             </div>
             <div className="space-y-6 text-sm text-muted sm:col-span-3">
               <p>
-                Whether you need a single replacement part or a recurring order, Kunjs Industrial Vault keeps the process simple. We coordinate specifications, availability, and logistics so you can stay focused on production.
+                Whether you need a single replacement part or a recurring order, Kunj's Industrial Vault keeps the process simple. We coordinate specifications, availability, and logistics so you can stay focused on production.
               </p>
               <ul className="space-y-3">
                 <li className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">

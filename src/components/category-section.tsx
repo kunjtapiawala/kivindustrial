@@ -56,7 +56,7 @@ const CategorySection = ({ category }: CategorySectionProps) => {
           )}
         </div>
         <div className="space-y-4 rounded-2xl border border-accent/30 bg-accent/10 p-5 text-sm text-primary">
-          <h3 className="text-sm font-semibold text-primary">Why teams use KIV Industrial</h3>
+          <h3 className="text-sm font-semibold text-primary">Why teams use KIV Industrial Parts</h3>
           <ul className="space-y-2">
             {category.highlights.map((highlight) => (
               <li key={highlight} className="flex items-start gap-2 text-muted">

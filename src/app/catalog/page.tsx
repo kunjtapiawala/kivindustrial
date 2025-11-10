@@ -7,9 +7,9 @@ import CategorySection from "@/components/category-section";
 import { catalogCategories } from "@/data/catalog";
 
 export const metadata: Metadata = {
-  title: "Catalog | KIV Industrial",
+  title: "Catalog | KIV Industrial Parts",
   description:
-    "Browse every electrical, industrial, and automation category KIV Industrial sources with blind shipping and easy payment options.",
+    "Browse every electrical, industrial, and automation category KIV Industrial Parts sources with blind shipping and easy payment options.",
 };
 
 const CatalogPage = () => {

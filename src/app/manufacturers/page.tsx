@@ -7,9 +7,9 @@ import ManufacturerCard from "@/components/manufacturer-card";
 import { manufacturers } from "@/data/manufacturers";
 
 export const metadata: Metadata = {
-  title: "Manufacturers | KIV Industrial",
+  title: "Manufacturers | KIV Industrial Parts",
   description:
-    "Explore popular and extended manufacturers sourced by KIV Industrial with blind shipping, no-pressure quotes, and easy payment options.",
+    "Explore popular and extended manufacturers sourced by KIV Industrial Parts with blind shipping, no-pressure quotes, and easy payment options.",
 };
 
 const ManufacturersPage = () => {
