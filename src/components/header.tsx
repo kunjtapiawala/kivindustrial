@@ -71,7 +71,7 @@ const Header = () => {
       <div className="bg-surface shadow-md">
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <Link href="/" className="text-lg font-semibold tracking-wide text-primary">
-            KIV Industrial
+            KIV Industrial Parts
           </Link>
           <nav aria-label="Primary" className="hidden items-center gap-6 text-sm text-muted sm:flex">
             <button
