@@ -4,7 +4,7 @@ export const hvacPlumbingCategory: CatalogCategory = {
   id: "hvac-plumbing",
   name: "HVAC & Plumbing",
   description:
-    "HVAC and plumbing components for facilities, OEM systems, and retrofits—blind shipped with documentation and support.",
+    "HVAC and plumbing components for facilities, OEM systems, and retrofits, blind shipped with documentation and support.",
   highlights: ["Certified OEM replacements", "On-site start-up coordination", "Large inventory ready to ship"],
   items: [
     "Air handlers",

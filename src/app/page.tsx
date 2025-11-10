@@ -5,6 +5,7 @@ import SectionHeading from "@/components/section-heading";
 import TrustGrid from "@/components/trust-grid";
 import ContactForm from "@/components/contact-form";
 import CategoryCard from "@/components/category-card";
+import SmoothScrollHandler from "@/components/smooth-scroll-handler";
 import { catalogCategories } from "@/data/catalog";
 import { manufacturers } from "@/data/manufacturers";
 
@@ -14,6 +15,7 @@ const Home = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <SmoothScrollHandler />
       <Header />
       <main className="flex-1">
         <section className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-16 sm:px-6 sm:py-24" id="hero">
@@ -25,7 +27,7 @@ const Home = () => {
               Source the industrial parts you need without the wait.
           </h1>
             <p className="text-base text-muted sm:max-w-xl">
-              KIV Industrial Parts connects you with a $5B+ supplier network spanning more than 3 million ready-to-ship items. Same-day or next-day fulfillment is the norm—and we keep lead times near zero for most requests.
+              KIV Industrial Parts connects you with a $5B+ supplier network spanning more than 3 million ready-to-ship items. Same-day or next-day fulfillment is the norm, and we keep lead times near zero for most requests.
             </p>
             <p className="rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-primary sm:max-w-lg">
               Due to demand, we are currently accepting sourcing orders of $2,500 USD or greater. Need support on a smaller project? Reach out and we will queue you as capacity opens.
@@ -82,7 +84,7 @@ const Home = () => {
                 </li>
               </ul>
               <p>
-                Do not take our word for it—send the quote request and we will prove it with pricing and turnaround that beats the competition.
+                Do not take our word for it - send the quote request and we will prove it with pricing and turnaround that beats the competition.
               </p>
             </div>
           </div>
@@ -136,7 +138,7 @@ const Home = () => {
               ))}
             </div>
             <div className="mt-8 flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-muted">Looking for another brand? Send the request—we will track it down.</p>
+              <p className="text-muted">Looking for another brand? Send the request, we will track it down.</p>
               <Link
                 href="/manufacturers"
                 className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
@@ -147,12 +149,12 @@ const Home = () => {
           </div>
         </section>
 
-        <section id="contact" className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-24">
+        <section id="contact" className="mx-auto max-w-4xl px-4 py-24 sm:px-6 sm:py-32">
           <div className="flex flex-col gap-8 rounded-2xl border border-white/10 bg-surface/80 p-6 shadow-sm sm:p-10">
             <SectionHeading
               eyebrow="Request"
               title="Tell us what you need"
-              description="Share the part, quantity, urgency, contact email, and phone—include the part number if you have it. We will reply within 12 hours; for urgent requests call 469-316-8517."
+              description="Share the part, quantity, urgency, contact email, and phone - include the part number if you have it. We will reply within 12 hours; for urgent requests call 469-316-8517."
             />
             <ContactForm />
         </div>

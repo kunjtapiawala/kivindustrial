@@ -4,7 +4,7 @@ export const hydraulicsCategory: CatalogCategory = {
   id: "hydraulics",
   name: "Hydraulics",
   description:
-    "Hydraulic power, motion control, and filtration components to keep equipment running—available as assemblies or individual parts with blind shipping.",
+    "Hydraulic power, motion control, and filtration components to keep equipment running, available as assemblies or individual parts with blind shipping.",
   highlights: ["Load-tested assemblies", "24/7 sourcing", "Kitting and rebuild services"],
   items: [
     "Hydraulic pumps",

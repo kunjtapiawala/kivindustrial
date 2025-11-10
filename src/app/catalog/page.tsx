@@ -24,7 +24,7 @@ const CatalogPage = () => {
             description="No-pressure sourcing, blind shipping, and easy payment backed by a $5B+ supplier network with 3M+ parts on hand and 10 logistics partners ready to move."
           />
           <p className="mt-6 text-sm text-muted">
-            Need help picking the right item? Call <a href="tel:+14693168517" className="text-primary underline-offset-2 hover:underline">469-316-8517</a> or send a request—experts are available 24/7/365 with direct supplier lines to eliminate lead time.
+            Need help picking the right item? Call <a href="tel:+14693168517" className="text-primary underline-offset-2 hover:underline">469-316-8517</a> or send a request - experts are available 24/7/365 with direct supplier lines to eliminate lead time.
           </p>
         </section>
 
@@ -38,7 +38,7 @@ const CatalogPage = () => {
           <div className="mx-auto flex max-w-4xl flex-col gap-6 px-4 py-16 text-center sm:px-6">
             <SectionHeading
               eyebrow="Ready when you are"
-              title="Send the list—large or small"
+              title="Send the list - large or small"
               description="Whether you need a single replacement or a full bill of materials, we will blind ship directly to your customer with zero hassle."
             />
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">

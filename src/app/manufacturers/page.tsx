@@ -24,11 +24,11 @@ const ManufacturersPage = () => {
           <SectionHeading
             eyebrow="Manufacturers"
             title="Trusted network, blind-ship ready"
-            description="These popular brands are just the beginning. We partner with hundreds of manufacturers and coordinate directly with them—backed by $5B+ in available inventory, 3M+ part numbers, and over 10 logistics partners to deliver faster and cheaper than the competition."
+            description="These popular brands are just the beginning. We partner with hundreds of manufacturers and coordinate directly with them, backed by $5B+ in available inventory, 3M+ part numbers, and over 10 logistics partners to deliver faster and cheaper than the competition."
           />
           <ul className="mt-6 space-y-2 text-sm text-muted">
             <li>✔ Blind ship to your customer or job site with neutral paperwork.</li>
-            <li>✔ Hassle-free payment—cards, ACH, and terms available.</li>
+            <li>✔ Hassle-free payment: cards, ACH, and terms available.</li>
             <li>✔ Experts available 24/7/365 at <a href="tel:+14693168517" className="text-primary underline-offset-2 hover:underline">469-316-8517</a>.</li>
           </ul>
         </section>
@@ -36,7 +36,7 @@ const ManufacturersPage = () => {
         <section className="border-t border-white/5 bg-surface/80">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
             <h2 className="text-sm uppercase tracking-[0.3em] text-accent/80">Most requested brands</h2>
-            <p className="mt-2 text-sm text-muted">Logos shown represent our most popular manufacturers—ask about any other brand, we likely already source it.</p>
+            <p className="mt-2 text-sm text-muted">Logos shown represent our most popular manufacturers - ask about any other brand, we likely already source it.</p>
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {popular.map((manufacturer) => (
                 <ManufacturerCard key={manufacturer.name} manufacturer={manufacturer} />
@@ -63,7 +63,7 @@ const ManufacturersPage = () => {
             <SectionHeading
               eyebrow="Need a quote?"
               title="No-pressure sourcing starts here"
-              description="Call, email, or submit the form—our team will confirm availability, price, and lead time within 12 hours or sooner. Do not believe it is possible? Ask for a quote and we will prove it."
+              description="Call, email, or submit the form - our team will confirm availability, price, and lead time within 12 hours or sooner. Do not believe it is possible? Ask for a quote and we will prove it."
             />
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
               <a

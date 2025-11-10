@@ -4,7 +4,7 @@ export const sensorsCategory: CatalogCategory = {
   id: "sensors",
   name: "Sensors",
   description:
-    "All sensing technologies—from proximity to vision—available for blind shipment.",
+    "All sensing technologies - from proximity to vision - available for blind shipment.",
   highlights: ["Application engineering support", "Hard-to-find replacements", "Pre-configured kits"],
   items: [
     "Photoelectric sensors",

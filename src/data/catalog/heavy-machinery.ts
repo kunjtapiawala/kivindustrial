@@ -4,7 +4,7 @@ export const heavyMachineryCategory: CatalogCategory = {
   id: "heavy-machinery",
   name: "Heavy Machinery Parts & Controls",
   description:
-    "OEM and aftermarket components for heavy equipment, mining trucks, and construction fleets—controllers, powertrain parts, and hydraulic assemblies shipped fast.",
+    "OEM and aftermarket components for heavy equipment, mining trucks, and construction fleets, controllers, powertrain parts, and hydraulic assemblies shipped fast.",
   highlights: [
     "Support for Caterpillar, Komatsu, Hitachi, John Deere, Volvo, Liebherr, and more",
     "Controller repair & replacements",

@@ -51,7 +51,7 @@ export const toolsAccessoriesCategory: CatalogCategory = {
       ],
     },
     {
-      title: "Cutting Tools — HSS & Solid Carbide",
+      title: "Cutting Tools - HSS & Solid Carbide",
       items: [
         "Countersink",
         "Drill Bit",
@@ -73,7 +73,7 @@ export const toolsAccessoriesCategory: CatalogCategory = {
       ],
     },
     {
-      title: "Cutting Tools — Indexables",
+      title: "Cutting Tools - Indexables",
       items: [
         "Chamfering",
         "Indexable End Mill",
