@@ -13,21 +13,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KIV Industrial | Kunjs Industrial Vault",
+  title: "KIV Industrial Parts | Kunjs Industrial Vault",
   description:
     "KIV Industrial sources critical industrial components fast. Request the parts you need and receive responsive support from Kunjs Industrial Vault.",
   metadataBase: new URL("https://www.kivindustrial.com"),
   openGraph: {
-    title: "KIV Industrial | Kunjs Industrial Vault",
+    title: "KIV Industrial Parts | Kunjs Industrial Vault",
     description:
       "Tech-forward sourcing platform for industrial parts. Tell us what you need and we'll handle the rest.",
     url: "https://www.kivindustrial.com",
-    siteName: "KIV Industrial",
+    siteName: "KIV Industrial Parts",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "KIV Industrial | Kunjs Industrial Vault",
+    title: "KIV Industrial Parts | Kunjs Industrial Vault",
     description:
       "Request industrial parts with rapid turnaround from KIV Industrial.",
   },
