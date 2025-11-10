@@ -27,19 +27,19 @@ const Home = () => {
             <p className="text-base text-muted sm:max-w-xl">
               KIV Industrial Parts connects you with a $5B+ supplier network spanning more than 3 million ready-to-ship items. Same-day or next-day fulfillment is the norm—and we keep lead times near zero for most requests.
             </p>
-            <p className="rounded-xl border border-accent/20 bg-accent/10 px-4 py-3 text-sm text-primary sm:max-w-lg">
+            <p className="rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-primary sm:max-w-lg">
               Due to demand, we are currently accepting sourcing orders of $2,500 USD or greater. Need support on a smaller project? Reach out and we will queue you as capacity opens.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href="#contact"
-                className="rounded-full bg-accent px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                className="rounded-full bg-accent px-6 py-3 text-center text-sm font-semibold text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               >
                 Request a Part
               </a>
               <a
                 href="#about"
-                className="rounded-full border border-white/10 px-6 py-3 text-center text-sm font-semibold text-primary transition hover:border-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                className="rounded-full border border-white/10 px-6 py-3 text-center text-sm font-semibold text-primary transition hover:border-accent hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               >
                 Why KIV Industrial Parts
               </a>
@@ -106,13 +106,13 @@ const Home = () => {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/catalog"
-                className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               >
                 View full catalog
               </Link>
               <a
                 href="tel:+14693168517"
-                className="rounded-full border border-white/10 px-5 py-2 text-sm font-semibold text-primary transition hover:border-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                className="rounded-full border border-white/10 px-5 py-2 text-sm font-semibold text-primary transition hover:border-accent hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               >
                 Call 469-316-8517
               </a>
@@ -139,7 +139,7 @@ const Home = () => {
               <p className="text-muted">Looking for another brand? Send the request—we will track it down.</p>
               <Link
                 href="/manufacturers"
-                className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               >
                 Explore manufacturers
               </Link>

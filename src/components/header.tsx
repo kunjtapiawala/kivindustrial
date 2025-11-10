@@ -93,7 +93,7 @@ const Header = () => {
             ))}
             <Link
               href="/#contact"
-              className="rounded-full bg-accent px-4 py-2 font-medium text-white transition hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="rounded-full bg-accent px-4 py-2 font-medium text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
               Request a Part
             </Link>
@@ -207,7 +207,7 @@ const Header = () => {
             ))}
             <Link
               href="/#contact"
-              className="block rounded-md bg-accent px-3 py-2 text-center text-sm font-medium text-white transition hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="block rounded-md bg-accent px-3 py-2 text-center text-sm font-medium text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               onClick={handleCloseMenu}
             >
               Request a Part

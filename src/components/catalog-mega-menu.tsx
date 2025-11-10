@@ -57,7 +57,7 @@ const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory }: Catalo
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/5 text-muted transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/5 text-muted transition hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               aria-label="Close catalog menu"
             >
               <span aria-hidden="true">&times;</span>
@@ -74,7 +74,7 @@ const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory }: Catalo
                     className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${isActive ? "bg-white/10 text-primary shadow-sm" : "text-muted hover:bg-white/5 hover:text-primary"}`}
                   >
                     <span
-                      className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold ${isActive ? "bg-accent text-white" : "bg-white/10 text-muted"}`}
+                      className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold ${isActive ? "bg-accent text-background" : "bg-white/10 text-muted"}`}
                     >
                       {category.name.slice(0, 2).toUpperCase()}
                     </span>
@@ -141,10 +141,10 @@ const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory }: Catalo
           ) : (
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {itemColumns.map((column, columnIndex) => (
-                <ul key={`column-${columnIndex}`} className="space-y-2 text-sm text-slate-600">
+                <ul key={`column-${columnIndex}`} className="space-y-2 text-sm text-muted">
                   {column.slice(0, PREVIEW_LIMIT).map((item, index) => (
                     <li key={`fallback-${item}-${index}`} className="flex items-start gap-2">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-slate-400" aria-hidden="true" />
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-accent/60" aria-hidden="true" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -156,7 +156,7 @@ const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory }: Catalo
             <Link
               href={`/catalog#${activeCategory.id}`}
               onClick={onClose}
-              className="rounded-full bg-accent px-5 py-2 font-semibold text-white transition hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="rounded-full bg-accent px-5 py-2 font-semibold text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
               View {activeCategory.name}
             </Link>
