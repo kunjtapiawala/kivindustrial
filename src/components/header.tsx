@@ -79,28 +79,31 @@ const Header = () => {
     if (canHover) {
       if (hoverTimeout) {
         clearTimeout(hoverTimeout);
+        setHoverTimeout(null);
       }
+      // Faster response time for better UX
       const timeout = setTimeout(() => {
         setIsMegaOpen(true);
-      }, 200); // 200ms delay before showing menu
+      }, 100); // Reduced from 200ms to 100ms for faster response
       setHoverTimeout(timeout);
     }
   };
 
   const handleCatalogMouseLeave = () => {
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-      setHoverTimeout(null);
+    // Don't close immediately - allow time to move to menu
+    // If user enters menu area, handleMegaMenuMouseEnter will cancel any close
+    if (!isMegaOpen) {
+      // Menu wasn't open, so just clear any pending open
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+        setHoverTimeout(null);
+      }
     }
-    // Delay closing to allow moving to the menu
-    const timeout = setTimeout(() => {
-      setIsMegaOpen(false);
-    }, 300);
-    setHoverTimeout(timeout);
+    // If menu is open, let the menu's mouse leave handler manage closing
   };
 
   const handleMegaMenuMouseEnter = () => {
-    // Keep menu open when hovering over it
+    // Keep menu open when hovering over it - cancel any close timers
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
       setHoverTimeout(null);
@@ -108,10 +111,10 @@ const Header = () => {
   };
 
   const handleMegaMenuMouseLeave = () => {
-    // Close menu after leaving
+    // Close menu after leaving - small delay for smooth UX
     const timeout = setTimeout(() => {
       setIsMegaOpen(false);
-    }, 300);
+    }, 150);
     setHoverTimeout(timeout);
   };
 
@@ -165,17 +168,19 @@ const Header = () => {
           <nav aria-label="Primary" className="hidden items-center gap-6 text-sm text-muted sm:flex">
             <div
               ref={catalogButtonRef}
-              className="relative"
+              className="relative group"
               onMouseEnter={handleCatalogMouseEnter}
               onMouseLeave={handleCatalogMouseLeave}
             >
               <Link
                 href="/catalog"
-                className="rounded-full px-4 py-2 text-sm font-medium transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface inline-flex items-center gap-1.5"
+                className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface inline-flex items-center gap-1.5 ${
+                  isMegaOpen ? "text-primary" : ""
+                }`}
               >
                 Catalog
                 <svg
-                  className="h-4 w-4 transition-transform"
+                  className={`h-4 w-4 transition-transform duration-300 ease-out ${isMegaOpen ? "rotate-180" : "group-hover:translate-y-0.5"}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -225,23 +230,36 @@ const Header = () => {
           </button>
           {isMegaOpen && (
             <>
+              {/* Invisible bridge area to help with mouse movement from button to menu */}
               <div
-                className="fixed inset-0 z-[45] bg-black/60 backdrop-blur-md transition-opacity"
+                className="fixed left-0 right-0 z-[45] pointer-events-none"
+                style={{ 
+                  top: `${headerRef.current?.offsetHeight || 100}px`,
+                  height: "8px"
+                }}
+                onMouseEnter={handleMegaMenuMouseEnter}
+              />
+              <div
+                className="fixed inset-0 z-[45] bg-black/60 backdrop-blur-md backdrop-enter"
                 onClick={() => setIsMegaOpen(false)}
                 onMouseEnter={handleMegaMenuMouseEnter}
                 onMouseLeave={handleMegaMenuMouseLeave}
                 aria-hidden="true"
+                style={{ pointerEvents: "auto" }}
               />
               <div
+                className="pointer-events-none"
                 onMouseEnter={handleMegaMenuMouseEnter}
                 onMouseLeave={handleMegaMenuMouseLeave}
               >
-                <CatalogMegaMenu
-                  onClose={() => setIsMegaOpen(false)}
-                  activeCategoryId={activeCategoryId}
-                  onSelectCategory={setActiveCategoryId}
-                  headerHeight={headerRef.current?.offsetHeight || 100}
-                />
+                <div className="pointer-events-auto">
+                  <CatalogMegaMenu
+                    onClose={() => setIsMegaOpen(false)}
+                    activeCategoryId={activeCategoryId}
+                    onSelectCategory={setActiveCategoryId}
+                    headerHeight={headerRef.current?.offsetHeight || 100}
+                  />
+                </div>
               </div>
             </>
           )}

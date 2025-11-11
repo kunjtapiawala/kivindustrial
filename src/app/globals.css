@@ -55,3 +55,32 @@ body {
     touch-action: manipulation;
   }
 }
+
+/* Smooth animations for catalog mega menu */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mega-menu-enter {
+  animation: fadeInDown 0.2s ease-out;
+}
+
+.backdrop-enter {
+  animation: fadeIn 0.2s ease-out;
+}

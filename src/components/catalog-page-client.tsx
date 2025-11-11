@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import SectionHeading from "@/components/section-heading";
 import CategorySection from "@/components/category-section";
@@ -10,6 +10,7 @@ import Footer from "@/components/footer";
 
 const CatalogPageClient = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const filteredCategories = useMemo(() => {
     if (!searchQuery.trim()) {
@@ -49,6 +50,16 @@ const CatalogPageClient = () => {
     });
   }, [searchQuery]);
 
+  // Scroll to results when search changes
+  useEffect(() => {
+    if (searchQuery.trim() && filteredCategories.length > 0 && resultsRef.current) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [searchQuery, filteredCategories.length]);
+
   return (
     <>
       <main className="flex-1">
@@ -63,22 +74,18 @@ const CatalogPageClient = () => {
           </p>
         </section>
 
-        <section className="border-t border-white/5 bg-surface/80">
-          <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+        <section className="border-t border-white/5 bg-surface/50 py-8 sticky top-[72px] z-40 backdrop-blur-sm">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6">
             <CatalogSearch searchQuery={searchQuery} onSearchChange={setSearchQuery} filteredCount={filteredCategories.length} />
           </div>
         </section>
 
-        <div className="mx-auto flex max-w-5xl flex-col gap-10 px-4 pb-16 sm:px-6">
-          {filteredCategories.length > 0 ? (
-            filteredCategories.map((category) => (
-              <CategorySection key={category.id} category={category} />
-            ))
-          ) : (
+        <div ref={resultsRef} className="mx-auto flex max-w-5xl flex-col gap-10 px-4 pb-16 sm:px-6 pt-8">
+          {searchQuery.trim() && filteredCategories.length === 0 ? (
             <div className="rounded-3xl border border-white/10 bg-surface/80 p-12 text-center">
               <p className="text-lg font-semibold text-primary mb-2">No results found</p>
               <p className="text-sm text-muted mb-6">
-                Try searching with different keywords or browse all categories below.
+                Try searching with different keywords or browse all categories.
               </p>
               <button
                 onClick={() => setSearchQuery("")}
@@ -87,6 +94,12 @@ const CatalogPageClient = () => {
                 Clear search
               </button>
             </div>
+          ) : (
+            <>
+              {filteredCategories.map((category) => (
+                <CategorySection key={category.id} category={category} />
+              ))}
+            </>
           )}
         </div>
 

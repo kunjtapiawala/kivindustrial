@@ -35,14 +35,14 @@ const CatalogSearch = ({ searchQuery, onSearchChange, filteredCount }: CatalogSe
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search categories, parts, or items..."
-          className="w-full rounded-xl border border-white/10 bg-surface/70 px-4 py-3 pl-12 pr-12 text-sm text-primary placeholder:text-muted outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          className="w-full rounded-xl border border-white/20 bg-surface px-4 py-3.5 pl-12 pr-12 text-base text-primary placeholder:text-muted/70 outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/30 focus:bg-surface shadow-lg"
           aria-label="Search catalog"
         />
         {searchQuery && (
           <button
             type="button"
             onClick={handleClear}
-            className="absolute inset-y-0 right-0 flex items-center pr-4 text-muted hover:text-primary transition"
+            className="absolute inset-y-0 right-0 flex items-center pr-4 text-muted hover:text-primary transition-colors"
             aria-label="Clear search"
           >
             <svg
@@ -62,13 +62,11 @@ const CatalogSearch = ({ searchQuery, onSearchChange, filteredCount }: CatalogSe
           </button>
         )}
       </div>
-      {searchQuery && filteredCount !== undefined && (
-        <p className="mt-2 text-sm text-muted">
-          {filteredCount === 0
-            ? "No results found"
-            : filteredCount === 1
-              ? "1 category found"
-              : `${filteredCount} categories found`}
+      {searchQuery && filteredCount !== undefined && filteredCount > 0 && (
+        <p className="mt-3 text-sm text-muted">
+          {filteredCount === 1
+            ? "1 category found"
+            : `${filteredCount} categories found`}
         </p>
       )}
     </div>
