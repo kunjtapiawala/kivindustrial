@@ -24,8 +24,11 @@ const Header = () => {
   const [activeCategoryId, setActiveCategoryId] = useState(catalogCategories[0]?.id ?? "");
   const [isMobileCatalogOpen, setIsMobileCatalogOpen] = useState(false);
   const [expandedMobileCategoryId, setExpandedMobileCategoryId] = useState<string | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [canHover, setCanHover] = useState(false);
 
   const headerRef = useRef<HTMLDivElement | null>(null);
+  const catalogButtonRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,7 +36,12 @@ const Header = () => {
         return;
       }
       const target = event.target as Node;
-      if (headerRef.current && !headerRef.current.contains(target)) {
+      if (
+        headerRef.current &&
+        !headerRef.current.contains(target) &&
+        catalogButtonRef.current &&
+        !catalogButtonRef.current.contains(target)
+      ) {
         setIsMegaOpen(false);
       }
     };
@@ -53,6 +61,60 @@ const Header = () => {
     };
   }, [isMegaOpen]);
 
+  // Check if device supports hover (desktop)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: hover)");
+    setCanHover(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setCanHover(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  const handleCatalogMouseEnter = () => {
+    // Only show on hover for desktop (not on touch devices)
+    if (canHover) {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+      const timeout = setTimeout(() => {
+        setIsMegaOpen(true);
+      }, 200); // 200ms delay before showing menu
+      setHoverTimeout(timeout);
+    }
+  };
+
+  const handleCatalogMouseLeave = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
+    // Delay closing to allow moving to the menu
+    const timeout = setTimeout(() => {
+      setIsMegaOpen(false);
+    }, 300);
+    setHoverTimeout(timeout);
+  };
+
+  const handleMegaMenuMouseEnter = () => {
+    // Keep menu open when hovering over it
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
+  };
+
+  const handleMegaMenuMouseLeave = () => {
+    // Close menu after leaving
+    const timeout = setTimeout(() => {
+      setIsMegaOpen(false);
+    }, 300);
+    setHoverTimeout(timeout);
+  };
+
   useEffect(() => {
     if (isMegaOpen || isMenuOpen) {
       const scrollY = window.scrollY;
@@ -70,6 +132,15 @@ const Header = () => {
       };
     }
   }, [isMegaOpen, isMenuOpen]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+    };
+  }, [hoverTimeout]);
 
   const handleToggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -92,14 +163,28 @@ const Header = () => {
             KIV Industrial Parts
           </Link>
           <nav aria-label="Primary" className="hidden items-center gap-6 text-sm text-muted sm:flex">
-            <button
-              type="button"
-              onClick={() => setIsMegaOpen((prev) => !prev)}
-              aria-expanded={isMegaOpen}
-              className="rounded-full px-4 py-2 text-sm font-medium transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            <div
+              ref={catalogButtonRef}
+              className="relative"
+              onMouseEnter={handleCatalogMouseEnter}
+              onMouseLeave={handleCatalogMouseLeave}
             >
-              Catalog
-            </button>
+              <Link
+                href="/catalog"
+                className="rounded-full px-4 py-2 text-sm font-medium transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface inline-flex items-center gap-1.5"
+              >
+                Catalog
+                <svg
+                  className="h-4 w-4 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </Link>
+            </div>
             {NAV_ITEMS.map((item) => {
               const isAuctions = item.href === "/auctions";
               return (
@@ -143,14 +228,21 @@ const Header = () => {
               <div
                 className="fixed inset-0 z-[45] bg-black/60 backdrop-blur-md transition-opacity"
                 onClick={() => setIsMegaOpen(false)}
+                onMouseEnter={handleMegaMenuMouseEnter}
+                onMouseLeave={handleMegaMenuMouseLeave}
                 aria-hidden="true"
               />
-              <CatalogMegaMenu
-                onClose={() => setIsMegaOpen(false)}
-                activeCategoryId={activeCategoryId}
-                onSelectCategory={setActiveCategoryId}
-                headerHeight={headerRef.current?.offsetHeight || 100}
-              />
+              <div
+                onMouseEnter={handleMegaMenuMouseEnter}
+                onMouseLeave={handleMegaMenuMouseLeave}
+              >
+                <CatalogMegaMenu
+                  onClose={() => setIsMegaOpen(false)}
+                  activeCategoryId={activeCategoryId}
+                  onSelectCategory={setActiveCategoryId}
+                  headerHeight={headerRef.current?.offsetHeight || 100}
+                />
+              </div>
             </>
           )}
         </div>

@@ -47,24 +47,33 @@ const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory, headerHe
   };
 
   return (
-    <div className="fixed left-0 right-0 z-[46] hidden sm:block px-4 sm:px-6" style={{ top: `${headerHeight}px` }}>
+    <div className="fixed left-0 right-0 z-[46] hidden sm:block px-4 sm:px-6" style={{ top: `${headerHeight + 8}px` }}>
       <div className="mx-auto flex max-w-6xl rounded-3xl border border-white/20 bg-surface/95 backdrop-blur-xl text-primary shadow-2xl shadow-black/70 ring-1 ring-white/10 transition-all duration-200">
         <aside
           className="relative w-72 overflow-y-auto border-r border-white/5 bg-surface/80 p-6 backdrop-blur"
           style={{ maxHeight: "70vh" }}
         >
-          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.35em] text-muted">
-            Categories
+          <div className="flex items-center justify-between mb-4">
+            <Link
+              href="/catalog"
+              onClick={onClose}
+              className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface flex-1 text-center"
+            >
+              View Full Catalog
+            </Link>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/5 text-muted transition hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="ml-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-muted transition hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               aria-label="Close catalog menu"
             >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <ul className="mt-5 space-y-1 text-sm">
+          <div className="text-xs font-semibold uppercase tracking-[0.35em] text-muted mb-4">
+            Categories
+          </div>
+          <ul className="space-y-1 text-sm">
             {catalogCategories.map((category) => {
               const isActive = category.id === activeCategory.id;
               return (
@@ -153,20 +162,13 @@ const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory, headerHe
               ))}
             </div>
           )}
-          <div className="mt-8 flex flex-wrap gap-3 text-sm">
+          <div className="mt-8 border-t border-white/10 pt-6">
             <Link
               href={`/catalog#${activeCategory.id}`}
               onClick={onClose}
-              className="rounded-full bg-accent px-5 py-2 font-semibold text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="block rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-center text-sm font-semibold text-primary transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
-              View {activeCategory.name}
-            </Link>
-            <Link
-              href="/catalog"
-              onClick={onClose}
-              className="rounded-full border border-white/10 px-5 py-2 font-semibold text-primary transition hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
-            >
-              Browse entire catalog
+              View all {activeCategory.name} →
             </Link>
           </div>
         </div>
