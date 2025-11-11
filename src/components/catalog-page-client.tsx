@@ -6,6 +6,7 @@ import SectionHeading from "@/components/section-heading";
 import CategorySection from "@/components/category-section";
 import CatalogSearch from "@/components/catalog-search";
 import { catalogCategories } from "@/data/catalog";
+import type { CatalogCategory } from "@/data/catalog";
 import Footer from "@/components/footer";
 
 const CatalogPageClient = () => {
@@ -91,7 +92,7 @@ const CatalogPageClient = () => {
 
         return null;
       })
-      .filter((category): category is typeof catalogCategories[0] => category !== null);
+      .filter((category): category is CatalogCategory => category !== null);
 
     return { categories: filteredCategories, matchingItems };
   }, [searchQuery]);
