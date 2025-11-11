@@ -10,33 +10,31 @@ const SmoothScrollHandler = () => {
       
       if (!anchor) return;
       
-      e.preventDefault();
+      const href = anchor.getAttribute("href");
+      if (!href || !href.includes("#contact")) return;
       
-      const targetElement = document.getElementById("contact");
-      if (targetElement) {
-        // Wait for any pending renders
-        requestAnimationFrame(() => {
-          const viewportHeight = window.innerHeight;
-          const elementRect = targetElement.getBoundingClientRect();
-          const elementTop = elementRect.top + window.pageYOffset;
-          const elementHeight = elementRect.height;
-          
-          // Calculate scroll position to center the form box vertically in viewport
-          // We want the center of the form box to be at the center of the viewport
-          const scrollPosition = elementTop + (elementHeight / 2) - (viewportHeight / 2);
-          
-          window.scrollTo({
-            top: Math.max(0, scrollPosition),
-            behavior: "smooth",
+      // Only handle hash-only links on the same page
+      // Let Next.js Link handle navigation to other pages
+      if (href.startsWith("#contact") && window.location.pathname === "/") {
+        e.preventDefault();
+        const targetElement = document.getElementById("contact");
+        if (targetElement) {
+          requestAnimationFrame(() => {
+            const viewportHeight = window.innerHeight;
+            const elementRect = targetElement.getBoundingClientRect();
+            const elementTop = elementRect.top + window.pageYOffset;
+            const elementHeight = elementRect.height;
+            const scrollPosition = elementTop + (elementHeight / 2) - (viewportHeight / 2);
+            
+            window.scrollTo({
+              top: Math.max(0, scrollPosition),
+              behavior: "smooth",
+            });
           });
-        });
-      } else {
-        // Fallback to normal anchor behavior if element not found
-        const href = anchor.getAttribute("href");
-        if (href) {
-          window.location.href = href;
         }
       }
+      // For links to home page with contact hash, let Next.js handle it
+      // The page load handler will scroll to contact
     };
 
     document.addEventListener("click", handleAnchorClick, true);
@@ -45,25 +43,42 @@ const SmoothScrollHandler = () => {
     };
   }, []);
 
-  // Also handle hash changes on page load
+  // Handle hash changes on page load (including query parameters)
   useEffect(() => {
-    if (window.location.hash === "#contact") {
-      const targetElement = document.getElementById("contact");
-      if (targetElement) {
-        setTimeout(() => {
-          const viewportHeight = window.innerHeight;
-          const elementRect = targetElement.getBoundingClientRect();
-          const elementTop = elementRect.top + window.pageYOffset;
-          const elementHeight = elementRect.height;
-          const scrollPosition = elementTop + (elementHeight / 2) - (viewportHeight / 2);
-          
-          window.scrollTo({
-            top: Math.max(0, scrollPosition),
-            behavior: "smooth",
-          });
-        }, 100);
+    const scrollToContact = () => {
+      const hash = window.location.hash;
+      const hasContactHash = hash === "#contact" || hash.endsWith("#contact");
+      const hasPartParam = new URLSearchParams(window.location.search).has("part");
+      
+      if (hasContactHash || hasPartParam) {
+        const targetElement = document.getElementById("contact");
+        if (targetElement) {
+          // Wait a bit for the page to render, especially if navigating from another page
+          setTimeout(() => {
+            const viewportHeight = window.innerHeight;
+            const elementRect = targetElement.getBoundingClientRect();
+            const elementTop = elementRect.top + window.pageYOffset;
+            const elementHeight = elementRect.height;
+            const scrollPosition = elementTop + (elementHeight / 2) - (viewportHeight / 2);
+            
+            window.scrollTo({
+              top: Math.max(0, scrollPosition),
+              behavior: "smooth",
+            });
+          }, 200);
+        }
       }
-    }
+    };
+
+    // Scroll on initial load
+    scrollToContact();
+
+    // Also listen for hash changes
+    window.addEventListener("hashchange", scrollToContact);
+    
+    return () => {
+      window.removeEventListener("hashchange", scrollToContact);
+    };
   }, []);
 
   return null;

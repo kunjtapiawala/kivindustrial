@@ -1,7 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 const urgencyOptions = [
   "Immediate (24-48h)",
@@ -32,9 +33,21 @@ const defaultState: FormState = {
 };
 
 const ContactForm = () => {
+  const searchParams = useSearchParams();
   const [formState, setFormState] = useState<FormState>(defaultState);
   const [submissionState, setSubmissionState] = useState<SubmissionState>("idle");
   const [feedbackMessage, setFeedbackMessage] = useState("");
+
+  // Pre-fill part name from URL parameter
+  useEffect(() => {
+    const partParam = searchParams.get("part");
+    if (partParam) {
+      setFormState((prev) => ({
+        ...prev,
+        partName: decodeURIComponent(partParam),
+      }));
+    }
+  }, [searchParams]);
 
   const isSubmitDisabled = useMemo(() => {
     return submissionState === "loading";

@@ -4,9 +4,10 @@ type CatalogSearchProps = {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   filteredCount?: number;
+  matchingItemsCount?: number;
 };
 
-const CatalogSearch = ({ searchQuery, onSearchChange, filteredCount }: CatalogSearchProps) => {
+const CatalogSearch = ({ searchQuery, onSearchChange, filteredCount, matchingItemsCount }: CatalogSearchProps) => {
   const handleClear = () => {
     onSearchChange("");
   };
@@ -62,11 +63,21 @@ const CatalogSearch = ({ searchQuery, onSearchChange, filteredCount }: CatalogSe
           </button>
         )}
       </div>
-      {searchQuery && filteredCount !== undefined && filteredCount > 0 && (
+      {searchQuery && filteredCount !== undefined && (
         <p className="mt-3 text-sm text-muted">
-          {filteredCount === 1
-            ? "1 category found"
-            : `${filteredCount} categories found`}
+          {filteredCount === 0 ? (
+            "No results found"
+          ) : matchingItemsCount !== undefined && matchingItemsCount > 0 ? (
+            <>
+              {matchingItemsCount} item{matchingItemsCount !== 1 ? "s" : ""} found in {filteredCount} categor{filteredCount !== 1 ? "ies" : "y"}
+            </>
+          ) : (
+            <>
+              {filteredCount === 1
+                ? "1 category found"
+                : `${filteredCount} categories found`}
+            </>
+          )}
         </p>
       )}
     </div>

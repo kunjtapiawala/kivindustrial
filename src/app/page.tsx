@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import SectionHeading from "@/components/section-heading";
@@ -156,7 +157,9 @@ const Home = () => {
               title="Tell us what you need"
               description="Share the part, quantity, urgency, contact email, and phone - include the part number if you have it. We will reply within 12 hours; for urgent requests call 469-316-8517."
             />
-            <ContactForm />
+            <Suspense fallback={<div className="text-muted">Loading form...</div>}>
+              <ContactForm />
+            </Suspense>
         </div>
         </section>
       </main>

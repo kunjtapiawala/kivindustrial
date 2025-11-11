@@ -12,53 +12,99 @@ const CatalogPageClient = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  const filteredCategories = useMemo(() => {
+  // Find all matching items across categories
+  const searchResults = useMemo(() => {
     if (!searchQuery.trim()) {
-      return catalogCategories;
+      return { categories: catalogCategories, matchingItems: [] };
     }
 
     const query = searchQuery.toLowerCase().trim();
+    const matchingItems: Array<{
+      item: string;
+      categoryId: string;
+      categoryName: string;
+      subcategory?: string;
+    }> = [];
 
-    return catalogCategories.filter((category) => {
-      // Search in category name
-      if (category.name.toLowerCase().includes(query)) {
-        return true;
-      }
+    const filteredCategories = catalogCategories
+      .map((category) => {
+        const matchingCategoryItems: string[] = [];
+        const matchingSubcategories: Array<{ title: string; items: string[] }> = [];
 
-      // Search in description
-      if (category.description.toLowerCase().includes(query)) {
-        return true;
-      }
+        // Check category name and description
+        const categoryMatches = 
+          category.name.toLowerCase().includes(query) ||
+          category.description.toLowerCase().includes(query);
 
-      // Search in items
-      if (category.items.some((item) => item.toLowerCase().includes(query))) {
-        return true;
-      }
+        // Check items in main category
+        category.items.forEach((item) => {
+          if (item.toLowerCase().includes(query)) {
+            matchingCategoryItems.push(item);
+            matchingItems.push({
+              item,
+              categoryId: category.id,
+              categoryName: category.name,
+            });
+          }
+        });
 
-      // Search in subcategories
-      if (
-        category.subcategories?.some(
-          (subcategory) =>
-            subcategory.title.toLowerCase().includes(query) ||
-            subcategory.items.some((item) => item.toLowerCase().includes(query))
-        )
-      ) {
-        return true;
-      }
+        // Check subcategories
+        if (category.subcategories) {
+          category.subcategories.forEach((subcategory) => {
+            const matchingSubItems: string[] = [];
+            const subcategoryMatches = subcategory.title.toLowerCase().includes(query);
 
-      return false;
-    });
+            subcategory.items.forEach((item) => {
+              if (item.toLowerCase().includes(query)) {
+                matchingSubItems.push(item);
+                matchingItems.push({
+                  item,
+                  categoryId: category.id,
+                  categoryName: category.name,
+                  subcategory: subcategory.title,
+                });
+              }
+            });
+
+            if (subcategoryMatches || matchingSubItems.length > 0) {
+              matchingSubcategories.push({
+                title: subcategory.title,
+                items: subcategoryMatches ? subcategory.items : matchingSubItems,
+              });
+            }
+          });
+        }
+
+        // Include category if it matches or has matching items
+        if (categoryMatches || matchingCategoryItems.length > 0 || matchingSubcategories.length > 0) {
+          return {
+            ...category,
+            // If category name/description matches, show all items; otherwise only matching items
+            items: categoryMatches ? category.items : (matchingCategoryItems.length > 0 ? matchingCategoryItems : category.items),
+            subcategories: matchingSubcategories.length > 0
+              ? matchingSubcategories
+              : categoryMatches && category.subcategories
+                ? category.subcategories
+                : undefined,
+          };
+        }
+
+        return null;
+      })
+      .filter((category): category is typeof catalogCategories[0] => category !== null);
+
+    return { categories: filteredCategories, matchingItems };
   }, [searchQuery]);
 
   // Scroll to results when search changes
   useEffect(() => {
-    if (searchQuery.trim() && filteredCategories.length > 0 && resultsRef.current) {
+    if (searchQuery.trim() && searchResults.categories.length > 0 && resultsRef.current) {
       // Small delay to ensure DOM is updated
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     }
-  }, [searchQuery, filteredCategories.length]);
+  }, [searchQuery, searchResults.categories.length]);
 
   return (
     <>
@@ -76,12 +122,17 @@ const CatalogPageClient = () => {
 
         <section className="border-t border-white/5 bg-surface/50 py-8 sticky top-[72px] z-40 backdrop-blur-sm">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            <CatalogSearch searchQuery={searchQuery} onSearchChange={setSearchQuery} filteredCount={filteredCategories.length} />
+            <CatalogSearch 
+              searchQuery={searchQuery} 
+              onSearchChange={setSearchQuery} 
+              filteredCount={searchResults.categories.length}
+              matchingItemsCount={searchResults.matchingItems.length}
+            />
           </div>
         </section>
 
         <div ref={resultsRef} className="mx-auto flex max-w-5xl flex-col gap-10 px-4 pb-16 sm:px-6 pt-8">
-          {searchQuery.trim() && filteredCategories.length === 0 ? (
+          {searchQuery.trim() && searchResults.categories.length === 0 ? (
             <div className="rounded-3xl border border-white/10 bg-surface/80 p-12 text-center">
               <p className="text-lg font-semibold text-primary mb-2">No results found</p>
               <p className="text-sm text-muted mb-6">
@@ -94,9 +145,67 @@ const CatalogPageClient = () => {
                 Clear search
               </button>
             </div>
+          ) : searchQuery.trim() && searchResults.matchingItems.length > 0 ? (
+            <>
+              {/* Search Results Summary */}
+              <div className="rounded-3xl border border-accent/30 bg-accent/10 p-6 mb-4">
+                <h2 className="text-lg font-semibold text-primary mb-2">
+                  Search Results for &quot;{searchQuery}&quot;
+                </h2>
+                <p className="text-sm text-muted mb-4">
+                  Found {searchResults.matchingItems.length} matching item{searchResults.matchingItems.length !== 1 ? "s" : ""} in {searchResults.categories.length} categor{searchResults.categories.length !== 1 ? "ies" : "y"}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
+                  {searchResults.matchingItems.map((result, index) => (
+                    <div
+                      key={`${result.categoryId}-${result.item}-${index}`}
+                      className="rounded-lg border border-white/10 bg-surface/50 p-3 text-sm text-primary hover:bg-surface hover:border-accent/30 transition flex flex-col gap-2"
+                    >
+                      <a
+                        href={`#${result.categoryId}${result.subcategory ? `-${result.subcategory.toLowerCase().replace(/[^a-z0-9]+/g, "-")}` : ""}`}
+                        className="flex-1"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const targetId = `${result.categoryId}${result.subcategory ? `-${result.subcategory.toLowerCase().replace(/[^a-z0-9]+/g, "-")}` : ""}`;
+                          const element = document.getElementById(targetId) || document.getElementById(result.categoryId);
+                          if (element) {
+                            element.scrollIntoView({ behavior: "smooth", block: "start" });
+                            // Highlight the element briefly
+                            element.classList.add("ring-2", "ring-accent");
+                            setTimeout(() => {
+                              element.classList.remove("ring-2", "ring-accent");
+                            }, 2000);
+                          }
+                        }}
+                      >
+                        <div className="font-medium text-primary">{result.item}</div>
+                        <div className="text-xs text-muted mt-1">
+                          {result.categoryName}
+                          {result.subcategory && ` • ${result.subcategory}`}
+                        </div>
+                      </a>
+                      <Link
+                        href={`/?part=${encodeURIComponent(result.item)}#contact`}
+                        className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface text-center"
+                      >
+                        Get a quote now
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Category Sections with highlighted matches */}
+              {searchResults.categories.map((category) => (
+                <CategorySection 
+                  key={category.id} 
+                  category={category} 
+                  searchQuery={searchQuery.trim()}
+                />
+              ))}
+            </>
           ) : (
             <>
-              {filteredCategories.map((category) => (
+              {searchResults.categories.map((category) => (
                 <CategorySection key={category.id} category={category} />
               ))}
             </>

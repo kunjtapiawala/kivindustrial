@@ -13,13 +13,45 @@ const PREVIEW_LIMIT = 10;
 
 type CategorySectionProps = {
   category: CatalogCategory;
+  searchQuery?: string;
 };
 
-const CategorySection = ({ category }: CategorySectionProps) => {
+const CategorySection = ({ category, searchQuery }: CategorySectionProps) => {
   const [showAllItems, setShowAllItems] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 
-  const displayedItems = showAllItems ? category.items : category.items.slice(0, PREVIEW_LIMIT);
+  // If searching, show all matching items; otherwise use preview limit
+  const shouldShowAll = searchQuery && searchQuery.trim().length > 0;
+  const displayedItems = shouldShowAll || showAllItems 
+    ? category.items 
+    : category.items.slice(0, PREVIEW_LIMIT);
+
+  // Highlight matching text in items
+  const highlightMatch = (text: string, query?: string) => {
+    if (!query || !query.trim()) {
+      return <span>{text}</span>;
+    }
+    
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${escapedQuery})`, "gi");
+    const parts = text.split(regex);
+    
+    return (
+      <span>
+        {parts.map((part, index) => {
+          // Check if this part matches the query (case-insensitive)
+          const matchRegex = new RegExp(`^${escapedQuery}$`, "i");
+          return matchRegex.test(part) ? (
+            <mark key={index} className="bg-accent/30 text-primary font-medium rounded px-0.5">
+              {part}
+            </mark>
+          ) : (
+            <span key={index}>{part}</span>
+          );
+        })}
+      </span>
+    );
+  };
 
   const handleToggleGroup = (title: string) => {
     setExpandedGroups((previous) => ({
@@ -40,12 +72,12 @@ const CategorySection = ({ category }: CategorySectionProps) => {
           <ul className="mt-3 grid grid-cols-1 gap-2 text-sm text-muted sm:grid-cols-2">
             {displayedItems.map((item, index) => (
               <li key={`${category.id}-item-${index}`} className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-                <span>{item}</span>
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-accent flex-shrink-0" aria-hidden="true" />
+                <span>{highlightMatch(item, searchQuery)}</span>
               </li>
             ))}
           </ul>
-          {category.items.length > PREVIEW_LIMIT && (
+          {!shouldShowAll && category.items.length > PREVIEW_LIMIT && (
             <button
               type="button"
               onClick={() => setShowAllItems((previous) => !previous)}
@@ -91,8 +123,8 @@ const CategorySection = ({ category }: CategorySectionProps) => {
                   <ul className="space-y-2 text-sm text-muted">
                     {itemsToDisplay.map((item, index) => (
                       <li key={`${group.title}-${index}`} className="flex items-start gap-2">
-                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-                        <span>{item}</span>
+                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-accent flex-shrink-0" aria-hidden="true" />
+                        <span>{highlightMatch(item, searchQuery)}</span>
                       </li>
                     ))}
                   </ul>
