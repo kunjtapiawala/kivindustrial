@@ -79,8 +79,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Find the lowest priced item with shipping
-    let lowestItem = null;
+    // Find the best matching item (lowest price with shipping, or best match)
+    let bestItem = null;
     let lowestTotalPrice = Infinity;
 
     for (const item of items) {
@@ -90,34 +90,85 @@ export async function POST(request: NextRequest) {
       );
       const currency = item.sellingStatus?.[0]?.currentPrice?.[0]?.["@currencyId"] || "USD";
       const totalPrice = price + shippingCost;
-
+      const itemId = item.itemId?.[0] || "";
+      const title = item.title?.[0] || "";
+      const url = item.viewItemURL?.[0] || "";
+      const galleryUrl = item.galleryURL?.[0] || "";
+      const location = item.location?.[0] || "";
+      const sellerInfo = item.sellerInfo?.[0];
+      const listingType = item.listingInfo?.[0]?.listingType?.[0] || "";
+      const watchCount = item.listingInfo?.[0]?.watchCount?.[0] || "";
+      
+      // Extract specifications from subtitle or primary category
+      const subtitle = item.subtitle?.[0] || "";
+      const primaryCategory = item.primaryCategory?.[0]?.categoryName?.[0] || "";
+      
       if (totalPrice < lowestTotalPrice) {
         lowestTotalPrice = totalPrice;
-        lowestItem = {
+        bestItem = {
           price,
           shippingCost,
           currency,
-          title: item.title?.[0] || "",
-          url: item.viewItemURL?.[0] || "",
+          title,
+          url,
+          itemId,
+          galleryUrl,
+          location,
+          subtitle,
+          primaryCategory,
+          listingType,
+          watchCount,
+          condition: condition,
         };
       }
     }
 
-    if (!lowestItem) {
+    if (!bestItem) {
       return NextResponse.json({
         success: false,
         error: "Could not determine pricing for the items found.",
       });
     }
 
+    // Extract part number and manufacturer from title for better presentation
+    const titleParts = bestItem.title.split(/[,\-\(\)]/).map((s: string) => s.trim()).filter(Boolean);
+
+    // Build description based on available information
+    const description = bestItem.subtitle || 
+      `${manufacturer} ${partNumber} - ${condition} condition. ${bestItem.primaryCategory ? `Category: ${bestItem.primaryCategory}.` : ''} Ready to ship.`;
+
+    // Extract specifications (common industrial part specs)
+    const specifications: Record<string, string> = {
+      Manufacturer: manufacturer,
+      "Part Number": partNumber,
+      Condition: condition,
+    };
+
+    if (bestItem.primaryCategory) {
+      specifications.Category = bestItem.primaryCategory;
+    }
+
+    if (bestItem.location) {
+      specifications.Location = bestItem.location;
+    }
+
     return NextResponse.json({
       success: true,
-      lowestPrice: lowestItem.price,
-      shippingCost: lowestItem.shippingCost,
-      totalPrice: lowestTotalPrice,
-      currency: lowestItem.currency,
-      itemTitle: lowestItem.title,
-      itemUrl: lowestItem.url,
+      item: {
+        title: bestItem.title,
+        description,
+        manufacturer,
+        partNumber,
+        condition: bestItem.condition,
+        price: bestItem.price,
+        shippingCost: bestItem.shippingCost,
+        totalPrice: lowestTotalPrice,
+        currency: bestItem.currency,
+        specifications,
+        imageUrl: bestItem.galleryUrl,
+        availability: "In Stock",
+        shipping: "Same-day or next-day shipping available",
+      },
     });
   } catch (error) {
     console.error("Instant quote error:", error);

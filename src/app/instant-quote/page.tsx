@@ -20,7 +20,7 @@ const InstantQuotePage = () => {
               Instant Quote
             </h1>
             <p className="mt-4 text-base text-muted sm:text-lg">
-              Get real-time pricing for industrial parts using eBay marketplace data. Enter the manufacturer and part number to find the lowest current price with shipping included.
+              Search our inventory for industrial parts. Enter the manufacturer and part number to get instant pricing, specifications, and availability. All items are ready to ship with competitive pricing.
             </p>
           </div>
 
