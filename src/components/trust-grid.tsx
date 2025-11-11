@@ -5,13 +5,12 @@ type TrustPoint = {
 
 const TRUST_POINTS: TrustPoint[] = [
   { label: "On-Time Fulfillment", value: "99%+" },
-  { label: "Parts In HQ Warehouse", value: "50K+" },
   { label: "Parts In Network", value: "3M+" },
 ];
 
 const TrustGrid = () => {
   return (
-    <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {TRUST_POINTS.map((point) => (
         <div
           key={point.label}
