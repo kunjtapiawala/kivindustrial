@@ -99,7 +99,7 @@ const AboutPage = () => {
                 </p>
                 
                 <p>
-                  Today, we leverage a $5B+ supplier network spanning more than 3 million ready-to-ship items. We work with hundreds of manufacturers and maintain relationships with over 10 logistics partners worldwide. But the foundation remains the same: trust, reliability, and the best prices.
+                  Today, we have 50,000 parts ready to ship from our HQ warehouse in Texas, and access to over 3 million parts from partner distributors across the United States. We work with hundreds of manufacturers and maintain relationships with over 10 logistics partners worldwide. But the foundation remains the same: trust, reliability, and the best prices.
                 </p>
               </div>
             </div>
@@ -164,7 +164,7 @@ const AboutPage = () => {
               description="Our growth reflects the trust and reliability we deliver to every customer."
             />
             
-            <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <div className="rounded-xl border border-white/10 bg-surface/60 px-6 py-8 text-center">
                 <div className="text-3xl font-bold text-accent sm:text-4xl">35,000+</div>
                 <div className="mt-2 text-sm font-semibold text-primary">Original SKUs</div>
@@ -172,9 +172,15 @@ const AboutPage = () => {
               </div>
               
               <div className="rounded-xl border border-white/10 bg-surface/60 px-6 py-8 text-center">
+                <div className="text-3xl font-bold text-accent sm:text-4xl">50K+</div>
+                <div className="mt-2 text-sm font-semibold text-primary">Parts In Warehouse</div>
+                <div className="mt-1 text-xs text-muted">Ready to ship from Texas HQ</div>
+              </div>
+              
+              <div className="rounded-xl border border-white/10 bg-surface/60 px-6 py-8 text-center">
                 <div className="text-3xl font-bold text-accent sm:text-4xl">3M+</div>
-                <div className="mt-2 text-sm font-semibold text-primary">Parts Available</div>
-                <div className="mt-1 text-xs text-muted">Through our supplier network</div>
+                <div className="mt-2 text-sm font-semibold text-primary">Parts In Network</div>
+                <div className="mt-1 text-xs text-muted">From partner distributors (US)</div>
               </div>
               
               <div className="rounded-xl border border-white/10 bg-surface/60 px-6 py-8 text-center">

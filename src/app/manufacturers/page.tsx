@@ -24,7 +24,7 @@ const ManufacturersPage = () => {
           <SectionHeading
             eyebrow="Manufacturers"
             title="Trusted network, blind-ship ready"
-            description="These popular brands are just the beginning. We partner with hundreds of manufacturers and coordinate directly with them, backed by $5B+ in available inventory, 3M+ part numbers, and over 10 logistics partners to deliver faster and cheaper than the competition."
+            description="These popular brands are just the beginning. We partner with hundreds of manufacturers and coordinate directly with them. 50,000 parts ready to ship from our Texas HQ warehouse, plus over 3 million parts from partner distributors across the United States."
           />
           <ul className="mt-6 space-y-2 text-sm text-muted">
             <li>✔ Blind ship to your customer or job site with neutral paperwork.</li>

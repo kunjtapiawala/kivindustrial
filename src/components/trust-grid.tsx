@@ -5,8 +5,8 @@ type TrustPoint = {
 
 const TRUST_POINTS: TrustPoint[] = [
   { label: "On-Time Fulfillment", value: "99%+" },
+  { label: "Parts In HQ Warehouse", value: "50K+" },
   { label: "Parts In Network", value: "3M+" },
-  { label: "Direct Supplier Inventory", value: "$5B+" },
 ];
 
 const TrustGrid = () => {

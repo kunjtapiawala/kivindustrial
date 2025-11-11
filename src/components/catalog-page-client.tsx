@@ -109,7 +109,7 @@ const CatalogPageClient = () => {
           <SectionHeading
             eyebrow="Catalog"
             title="Every electrical, industrial, and automation part"
-            description="No-pressure sourcing, blind shipping, and easy payment backed by a $5B+ supplier network with 3M+ parts on hand and 10 logistics partners ready to move."
+            description="No-pressure sourcing, blind shipping, and easy payment. 50,000 parts ready to ship from our Texas HQ warehouse, plus over 3 million parts from partner distributors across the United States."
           />
           <p className="mt-6 text-sm text-muted">
             Need help picking the right item? Call <a href="tel:+14693168517" className="text-primary underline-offset-2 hover:underline">469-316-8517</a> or send a request - experts are available 24/7/365 with direct supplier lines to eliminate lead time.
