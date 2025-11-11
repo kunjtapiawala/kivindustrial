@@ -33,6 +33,11 @@ CONTACT_RECIPIENT_EMAIL=your@email.com
 # eBay API Configuration (for Instant Quote feature)
 EBAY_APP_ID=your-ebay-app-id
 EBAY_API_ENV=sandbox
+EBAY_VERIFICATION_TOKEN=your-verification-token
+
+# eBay Notification Endpoint (for Marketplace Account Deletion)
+# This is required for production keysets. The endpoint URL will be:
+# https://yourdomain.com/api/ebay/notifications
 ```
 
 - `CONTACT_SENDER_EMAIL` is the "from" address shown to recipients. If omitted, the app will fall back to `SMTP_USER`.
@@ -43,6 +48,10 @@ EBAY_API_ENV=sandbox
 - `EBAY_API_ENV` can be `sandbox` (default) or `production`. Use sandbox for testing.
   - Sandbox credentials have the `SBX-` prefix.
   - Production credentials will have a different prefix when you're ready to go live.
+- `EBAY_VERIFICATION_TOKEN` is a secure token used to verify notifications from eBay. Generate a random string (e.g., using `crypto.randomBytes(32).toString('hex')`).
+  - **Required for production:** eBay requires marketplace account deletion notifications to be set up for production keysets.
+  - The notification endpoint is available at `/api/ebay/notifications`
+  - Configure this endpoint URL in your eBay developer dashboard under "Alerts & Notifications"
 
 Restart the dev server after adding environment variables.
 
