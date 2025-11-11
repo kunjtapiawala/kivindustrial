@@ -51,17 +51,24 @@ export async function GET(request: NextRequest) {
         );
       }
 
-      // Concatenate challenge_code + verificationToken + endpoint URL
-      const concatenatedString = challengeCode + VERIFICATION_TOKEN + ENDPOINT_URL;
+      // eBay requires hashing in this exact order: challengeCode + verificationToken + endpoint
+      // Use multiple hash.update() calls as shown in eBay's official Node.js example
+      // This ensures proper UTF-8 encoding and matches eBay's expectations exactly
+      const hash = crypto.createHash("sha256");
+      hash.update(challengeCode, "utf8");
+      hash.update(VERIFICATION_TOKEN, "utf8");
+      hash.update(ENDPOINT_URL, "utf8");
+      const responseHash = hash.digest("hex");
       
-      // Compute SHA-256 hash (hexadecimal, not base64)
-      const hash = crypto.createHash("sha256").update(concatenatedString).digest("hex");
+      console.log("eBay challenge verification:");
+      console.log("  Challenge code:", challengeCode);
+      console.log("  Endpoint:", ENDPOINT_URL);
+      console.log("  Computed hash:", responseHash);
       
-      console.log("Computed challenge response hash:", hash);
-      
-      // Return the hash in JSON format
+      // Return the hash in JSON format using NextResponse.json() to avoid BOM issues
+      // eBay documentation emphasizes using a JSON library to prevent byte order marks
       return NextResponse.json(
-        { challengeResponse: hash },
+        { challengeResponse: responseHash },
         {
           status: 200,
           headers: {
@@ -115,21 +122,31 @@ export async function POST(request: NextRequest) {
     // Log the notification (you can process this as needed)
     console.log("eBay Marketplace Account Deletion Notification:", JSON.stringify(payload, null, 2));
 
-    // Handle different notification types
-    if (payload.notification) {
-      const notificationType = payload.notification.notificationType;
-      const event = payload.notification.event;
-
-      // Handle marketplace account deletion
-      if (notificationType === "MARKETPLACE_ACCOUNT_DELETED" || event === "MARKETPLACE_ACCOUNT_DELETED") {
-        // Process the account deletion notification
-        // You can save this to a database, send an email, etc.
-        console.log("Marketplace account deleted:", payload);
+    // Handle marketplace account deletion notifications
+    // According to eBay docs, check metadata.topic for "MARKETPLACE_ACCOUNT_DELETION"
+    if (payload.metadata?.topic === "MARKETPLACE_ACCOUNT_DELETION") {
+      const notification = payload.notification;
+      
+      if (notification?.data) {
+        const { username, userId, eiasToken } = notification.data;
         
-        // TODO: Add your business logic here
-        // - Log to database
-        // - Send email notification to admin
-        // - Update internal records
+        console.log("Marketplace account deletion notification received:");
+        console.log("  Notification ID:", notification.notificationId);
+        console.log("  Event Date:", notification.eventDate);
+        console.log("  User ID:", userId);
+        console.log("  Username:", username || "N/A");
+        console.log("  EIAS Token:", eiasToken ? eiasToken.substring(0, 20) + "..." : "N/A");
+        
+        // TODO: Implement your business logic here:
+        // 1. Delete all user data associated with this userId
+        // 2. Delete data associated with eiasToken if used
+        // 3. Delete data associated with username if used
+        // 4. Log the deletion for audit purposes
+        // 5. Ensure deletion is permanent (cannot be reversed)
+        
+        // Note: Deletion should be done in a manner such that even the highest
+        // system privilege cannot reverse the deletion, unless required by law
+        // (e.g., tax, collections, AML regulations)
       }
     }
 
