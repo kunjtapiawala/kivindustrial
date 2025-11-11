@@ -101,15 +101,22 @@ const Header = () => {
             >
               Catalog
             </button>
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {NAV_ITEMS.map((item) => {
+              const isAuctions = item.href === "/auctions";
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={
+                    isAuctions
+                      ? "rounded-full border-2 border-accent bg-accent/10 px-4 py-2 font-semibold text-accent transition hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                      : "transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                  }
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
             <Link
               href="/#contact"
               className="rounded-full bg-accent px-4 py-2 font-medium text-background transition hover:bg-[var(--accent-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
@@ -263,16 +270,23 @@ const Header = () => {
             </div>
             
             <div className="border-t border-white/5 pt-3 space-y-2">
-              {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="block rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base font-medium text-primary transition hover:bg-white/10 active:bg-white/15 min-h-[48px] flex items-center"
-                  onClick={handleCloseMenu}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {NAV_ITEMS.map((item) => {
+                const isAuctions = item.href === "/auctions";
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={
+                      isAuctions
+                        ? "block rounded-xl border-2 border-accent bg-accent/10 px-4 py-3 text-base font-semibold text-accent transition hover:bg-accent hover:text-background active:bg-accent active:text-background min-h-[48px] flex items-center"
+                        : "block rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base font-medium text-primary transition hover:bg-white/10 active:bg-white/15 min-h-[48px] flex items-center"
+                    }
+                    onClick={handleCloseMenu}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
             </div>
             
             <Link
