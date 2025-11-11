@@ -28,7 +28,7 @@ const Home = () => {
               Source the industrial parts you need without the wait.
           </h1>
             <p className="text-base text-muted sm:max-w-xl">
-              KIV Industrial Parts offers 50,000 parts ready to ship from our HQ warehouse in Texas, plus over 3 million parts from partner distributors across the United States. Same-day or next-day fulfillment is the norm, and we keep lead times near zero for most requests.
+              Get instant access to 50,000 parts from our Texas HQ warehouse, plus over 3 million parts through our nationwide distributor network. Same-day or next-day shipping available, with lead times near zero for most orders.
             </p>
             <p className="rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-primary sm:max-w-lg">
               Due to demand, we are currently accepting sourcing orders of $2,500 USD or greater. Need support on a smaller project? Reach out and we will queue you as capacity opens.
