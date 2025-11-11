@@ -22,6 +22,11 @@ import { servoProductsCategory } from "./catalog/servo-products";
 import { switchesCategory } from "./catalog/switches";
 import { testMeasurementCategory } from "./catalog/test-measurement";
 import { toolsAccessoriesCategory } from "./catalog/tools-accessories";
+import { enclosuresPanelsCategory } from "./catalog/enclosures-panels";
+import { bearingsSealsCategory } from "./catalog/bearings-seals";
+import { materialHandlingCategory } from "./catalog/material-handling";
+import { weldingEquipmentCategory } from "./catalog/welding-equipment";
+import { circuitBoardsCategory } from "./catalog/circuit-boards";
 
 export type { CatalogCategory } from "./catalog/types";
 
@@ -48,5 +53,10 @@ export const catalogCategories: CatalogCategory[] = [
   testMeasurementCategory,
   toolsAccessoriesCategory,
   heavyMachineryCategory,
+  enclosuresPanelsCategory,
+  bearingsSealsCategory,
+  materialHandlingCategory,
+  weldingEquipmentCategory,
+  circuitBoardsCategory,
 ];
 
