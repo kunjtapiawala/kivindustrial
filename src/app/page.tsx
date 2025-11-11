@@ -54,6 +54,33 @@ const Home = () => {
           <TrustGrid />
         </section>
 
+        <section className="border-t border-white/5 bg-surface/50">
+          <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent sm:text-4xl">5,000+</div>
+                <div className="mt-2 text-sm font-medium text-primary">Orders Fulfilled Per Year</div>
+                <div className="mt-1 text-xs text-muted">Consistent delivery excellence</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent sm:text-4xl">11,000+</div>
+                <div className="mt-2 text-sm font-medium text-primary">Positive Reviews</div>
+                <div className="mt-1 text-xs text-muted">Trusted by thousands</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent sm:text-4xl">120+</div>
+                <div className="mt-2 text-sm font-medium text-primary">Countries Served</div>
+                <div className="mt-1 text-xs text-muted">Global shipping network</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent sm:text-4xl">Loyal</div>
+                <div className="mt-2 text-sm font-medium text-primary">Customer Base</div>
+                <div className="mt-1 text-xs text-muted">Long-term partnerships</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="border-t border-white/5 bg-surface/80" id="about">
           <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-16 sm:grid sm:grid-cols-5 sm:gap-10 sm:px-6">
             <div className="sm:col-span-2">
