@@ -9,7 +9,6 @@ export const controlsIndicatorsCategory: CatalogCategory = {
     "Pushbuttons & selector switches",
     "Pilot lights",
     "Stack lights & beacons",
-    "Emergency stops",
     "Key-operated switches",
     "Panel meters",
     "Annunciators",

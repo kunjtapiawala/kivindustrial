@@ -13,7 +13,6 @@ export const switchesCategory: CatalogCategory = {
     "Float switches",
     "Pressure switches",
     "Level switches",
-    "Selector switches",
     "Reed switches",
     "Micro switches",
     "Programmable switches",

@@ -11,7 +11,6 @@ export const sensorsCategory: CatalogCategory = {
     "Inductive proximity sensors",
     "Capacitive sensors",
     "Ultrasonic sensors",
-    "Vision systems",
     "Encoders",
     "Temperature sensors",
     "Pressure transducers",

@@ -4,12 +4,11 @@ export const drivesCategory: CatalogCategory = {
   id: "drives",
   name: "Drives",
   description:
-    "Variable frequency, soft-start, and servo drives pre-configured to ship blind directly to your customer.",
+    "Variable frequency and soft-start drives pre-configured to ship blind directly to your customer.",
   highlights: ["All major horsepower ranges", "Application programming support", "Factory warranty support"],
   items: [
     "AC variable frequency drives",
     "DC drives",
-    "Servo drives",
     "Soft starters",
     "Regenerative drives",
     "Drive option cards",

@@ -116,37 +116,41 @@ const CatalogPageClient = () => {
           </p>
         </section>
 
-        <section className="border-t border-white/5 bg-surface/50 py-8 sticky top-[72px] z-40 backdrop-blur-sm">
+        {/* Category Navigation */}
+        <section className="border-t border-white/5 bg-surface/50 py-8">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            {/* Category Navigation */}
-            <div className="mb-8">
-              <h2 className="text-xs font-semibold text-muted uppercase tracking-wider mb-4">Browse Categories</h2>
-              <div className="flex flex-wrap gap-2.5">
-                {catalogCategories.map((category) => (
-                  <a
-                    key={category.id}
-                    href={`#${category.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const element = document.getElementById(category.id);
-                      if (element) {
-                        const headerOffset = 120;
-                        const elementPosition = element.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            <h2 className="text-xs font-semibold text-muted uppercase tracking-wider mb-4">Browse Categories</h2>
+            <div className="flex flex-wrap gap-2.5">
+              {catalogCategories.map((category) => (
+                <a
+                  key={category.id}
+                  href={`#${category.id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const element = document.getElementById(category.id);
+                    if (element) {
+                      const headerOffset = 120;
+                      const elementPosition = element.getBoundingClientRect().top;
+                      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
-                      }
-                    }}
-                    className="inline-flex items-center rounded-full border border-white/20 bg-surface/80 px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all duration-200 hover:border-accent/60 hover:bg-accent/15 hover:text-accent hover:shadow-md hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:scale-100"
-                  >
-                    {category.name}
-                  </a>
-                ))}
-              </div>
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                  className="inline-flex items-center rounded-full border border-white/20 bg-surface/80 px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all duration-200 hover:border-accent/60 hover:bg-accent/15 hover:text-accent hover:shadow-md hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:scale-100"
+                >
+                  {category.name}
+                </a>
+              ))}
             </div>
+          </div>
+        </section>
+
+        {/* Search Bar - Sticky */}
+        <section className="border-t border-white/5 bg-surface/50 py-6 sticky top-[72px] z-40 backdrop-blur-sm">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6">
             <CatalogSearch 
               searchQuery={searchQuery} 
               onSearchChange={setSearchQuery} 

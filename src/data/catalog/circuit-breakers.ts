@@ -16,7 +16,6 @@ export const circuitBreakersCategory: CatalogCategory = {
     "Motor circuit protectors",
     "Panelboard assemblies",
     "Arc flash relays",
-    "Overload relays",
   ],
   subcategories: [
     {

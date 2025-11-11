@@ -8,7 +8,6 @@ export const motorsCategory: CatalogCategory = {
   highlights: ["Custom motor builds", "On-site start-up coordination", "Blind ship packaging"],
   items: [
     "AC induction motors",
-    "Servo motors",
     "Stepper motors",
     "Explosion-proof motors",
     "Brake motors",

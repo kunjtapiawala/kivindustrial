@@ -13,7 +13,6 @@ export const heavyMachineryCategory: CatalogCategory = {
   items: [
     "Engine controllers",
     "Monitoring systems",
-    "Hydraulic pumps",
     "Undercarriage assemblies",
     "Transmission modules",
     "Load sensors",
