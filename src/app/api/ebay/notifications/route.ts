@@ -106,17 +106,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify the request is from eBay
-    const verificationToken = request.headers.get("X-EBAY-SIGNATURE");
-    
-    if (VERIFICATION_TOKEN && verificationToken && verificationToken !== VERIFICATION_TOKEN) {
-      return NextResponse.json(
-        { error: "Invalid verification token" },
-        { status: 401 }
-      );
-    }
-
     // Parse the notification payload
+    // Note: According to eBay docs, X-EBAY-SIGNATURE contains a Base64-encoded signature
+    // that should be verified using eBay's public keys via their SDKs.
+    // For now, we acknowledge all notifications. Signature verification can be added later.
     const payload = await request.json();
     
     // Log the notification (you can process this as needed)
