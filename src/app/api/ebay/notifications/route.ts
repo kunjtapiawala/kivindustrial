@@ -16,36 +16,41 @@ const VERIFICATION_TOKEN = process.env.EBAY_VERIFICATION_TOKEN || "";
 export async function GET(request: NextRequest) {
   try {
     // eBay sends a verification challenge with query parameters
+    // The challenge_code parameter contains the verification code that must be echoed back
+    // This is eBay's way of verifying the endpoint is accessible and working
     const challengeCode = request.nextUrl.searchParams.get("challenge_code");
-    const verificationToken = request.headers.get("X-EBAY-SIGNATURE");
 
-    // Verify the token matches (if provided in header)
-    if (VERIFICATION_TOKEN && verificationToken && verificationToken !== VERIFICATION_TOKEN) {
-      return NextResponse.json(
-        { error: "Invalid verification token" },
-        { status: 401 }
-      );
-    }
-
-    // eBay expects the challenge_code to be echoed back
+    // eBay requires the endpoint to return the challenge_code in the response body
+    // This is a simple echo-back mechanism - no authentication required for verification
     if (challengeCode) {
+      console.log("eBay verification challenge received:", challengeCode);
+      // Return the challenge code as plain text in the response body
+      // Content-Type should be text/plain
+      // Status should be 200
       return new NextResponse(challengeCode, {
         status: 200,
         headers: {
           "Content-Type": "text/plain",
-          "X-EBAY-CHALLENGE-RESPONSE": challengeCode,
         },
       });
     }
 
-    // If no challenge code, return success to indicate endpoint is alive
-    return NextResponse.json({ status: "ok" }, { status: 200 });
+    // If no challenge code, return a simple response to indicate endpoint is alive
+    // This allows basic health checks
+    return new NextResponse("Endpoint is active", {
+      status: 200,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
   } catch (error) {
     console.error("eBay notification verification error:", error);
-    return NextResponse.json(
-      { error: "Verification failed" },
-      { status: 500 }
-    );
+    return new NextResponse("Internal Server Error", {
+      status: 500,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
   }
 }
 
