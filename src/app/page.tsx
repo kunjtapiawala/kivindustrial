@@ -7,6 +7,7 @@ import TrustGrid from "@/components/trust-grid";
 import ContactForm from "@/components/contact-form";
 import CategoryCard from "@/components/category-card";
 import SmoothScrollHandler from "@/components/smooth-scroll-handler";
+import ReviewsSection from "@/components/reviews-section";
 import { catalogCategories } from "@/data/catalog";
 import { manufacturers } from "@/data/manufacturers";
 
@@ -199,6 +200,8 @@ const Home = () => {
             </div>
           </div>
         </section>
+
+        <ReviewsSection />
 
         <section id="contact" className="mx-auto max-w-4xl px-4 py-24 sm:px-6 sm:py-32">
           <div className="flex flex-col gap-8 rounded-2xl border border-white/10 bg-surface/80 p-6 shadow-sm sm:p-10">
