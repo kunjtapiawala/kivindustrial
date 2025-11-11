@@ -38,7 +38,11 @@ EBAY_API_ENV=sandbox
 - `CONTACT_SENDER_EMAIL` is the "from" address shown to recipients. If omitted, the app will fall back to `SMTP_USER`.
 - `CONTACT_RECIPIENT_EMAIL` is where sourcing requests are delivered.
 - `EBAY_APP_ID` is your eBay Application ID (Client ID). Get it from [eBay Developer Program](https://developer.ebay.com/my/keys).
+  - **Note:** For the eBay Finding API used by Instant Quote, only the App ID (Client ID) is required.
+  - Dev ID and Cert ID are not needed for the Finding API.
 - `EBAY_API_ENV` can be `sandbox` (default) or `production`. Use sandbox for testing.
+  - Sandbox credentials have the `SBX-` prefix.
+  - Production credentials will have a different prefix when you're ready to go live.
 
 Restart the dev server after adding environment variables.
 
