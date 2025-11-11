@@ -3,6 +3,18 @@ import { NextRequest, NextResponse } from "next/server";
 // Verification token - should match what's configured in eBay dashboard
 const VERIFICATION_TOKEN = process.env.EBAY_VERIFICATION_TOKEN || "";
 
+// Handle CORS preflight requests
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, X-EBAY-SIGNATURE",
+    },
+  });
+}
+
 /**
  * eBay Marketplace Account Deletion Notification Endpoint
  * 
@@ -27,10 +39,12 @@ export async function GET(request: NextRequest) {
       // Return the challenge code as plain text in the response body
       // Content-Type should be text/plain
       // Status should be 200
+      // Must return exactly the challenge_code value - nothing else
       return new NextResponse(challengeCode, {
         status: 200,
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "no-cache, no-store, must-revalidate",
         },
       });
     }
