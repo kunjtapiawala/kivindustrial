@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import SectionHeading from "@/components/section-heading";
 import CategorySection from "@/components/category-section";
@@ -11,7 +11,6 @@ import Footer from "@/components/footer";
 
 const CatalogPageClient = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const resultsRef = useRef<HTMLDivElement>(null);
 
   // Find all matching items across categories
   const searchResults = useMemo(() => {
@@ -101,15 +100,7 @@ const CatalogPageClient = () => {
     return { categories: filteredCategories, matchingItems };
   }, [searchQuery]);
 
-  // Scroll to results when search changes
-  useEffect(() => {
-    if (searchQuery.trim() && searchResults.categories.length > 0 && resultsRef.current) {
-      // Small delay to ensure DOM is updated
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-    }
-  }, [searchQuery, searchResults.categories.length]);
+  // Removed auto-scroll - user stays at search bar to see all results
 
   return (
     <>
@@ -136,7 +127,7 @@ const CatalogPageClient = () => {
           </div>
         </section>
 
-        <div ref={resultsRef} className="mx-auto flex max-w-5xl flex-col gap-10 px-4 pb-16 sm:px-6 pt-8">
+        <div className="mx-auto flex max-w-5xl flex-col gap-10 px-4 pb-16 sm:px-6 pt-8">
           {searchQuery.trim() && searchResults.categories.length === 0 ? (
             <div className="rounded-3xl border border-white/10 bg-surface/80 p-12 text-center">
               <p className="text-lg font-semibold text-primary mb-2">No results found</p>
