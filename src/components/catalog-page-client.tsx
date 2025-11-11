@@ -27,7 +27,7 @@ const CatalogPageClient = () => {
       subcategory?: string;
     }> = [];
 
-    const filteredCategories = catalogCategories
+    const filteredCategories: CatalogCategory[] = catalogCategories
       .map((category) => {
         const matchingCategoryItems: string[] = [];
         const matchingSubcategories: Array<{ title: string; items: string[] }> = [];
@@ -78,21 +78,25 @@ const CatalogPageClient = () => {
 
         // Include category if it matches or has matching items
         if (categoryMatches || matchingCategoryItems.length > 0 || matchingSubcategories.length > 0) {
-          return {
-            ...category,
-            // If category name/description matches, show all items; otherwise only matching items
+          // Build the filtered category ensuring it matches CatalogCategory type
+          const filteredCategory: CatalogCategory = {
+            id: category.id,
+            name: category.name,
+            description: category.description,
+            highlights: category.highlights,
             items: categoryMatches ? category.items : (matchingCategoryItems.length > 0 ? matchingCategoryItems : category.items),
-            subcategories: matchingSubcategories.length > 0
-              ? matchingSubcategories
+            ...(matchingSubcategories.length > 0
+              ? { subcategories: matchingSubcategories }
               : categoryMatches && category.subcategories
-                ? category.subcategories
-                : undefined,
+                ? { subcategories: category.subcategories }
+                : {}),
           };
+          return filteredCategory;
         }
 
         return null;
       })
-      .filter((category): category is CatalogCategory => category !== null);
+      .filter((category) => category !== null) as CatalogCategory[];
 
     return { categories: filteredCategories, matchingItems };
   }, [searchQuery]);
