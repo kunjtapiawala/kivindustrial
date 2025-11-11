@@ -49,7 +49,7 @@ const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory, headerHe
   return (
     <div 
       className="fixed left-0 right-0 z-[46] hidden sm:block px-4 sm:px-6 pointer-events-auto" 
-      style={{ top: `${headerHeight}px` }}
+      style={{ top: `${headerHeight + 4}px` }}
     >
       <div className="mx-auto flex max-w-6xl rounded-3xl border border-white/20 bg-surface/95 backdrop-blur-xl text-primary shadow-2xl shadow-black/70 ring-1 ring-white/10 mega-menu-enter">
         <aside

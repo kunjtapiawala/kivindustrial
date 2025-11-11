@@ -29,6 +29,7 @@ const Header = () => {
 
   const headerRef = useRef<HTMLDivElement | null>(null);
   const catalogButtonRef = useRef<HTMLDivElement | null>(null);
+  const arrowRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -36,11 +37,23 @@ const Header = () => {
         return;
       }
       const target = event.target as Node;
+      // Don't close if clicking on arrow or catalog button area
+      if (
+        arrowRef.current &&
+        (arrowRef.current.contains(target) || arrowRef.current.isSameNode(target))
+      ) {
+        return;
+      }
+      if (
+        catalogButtonRef.current &&
+        catalogButtonRef.current.contains(target)
+      ) {
+        return;
+      }
+      // Close if clicking outside
       if (
         headerRef.current &&
-        !headerRef.current.contains(target) &&
-        catalogButtonRef.current &&
-        !catalogButtonRef.current.contains(target)
+        !headerRef.current.contains(target)
       ) {
         setIsMegaOpen(false);
       }
@@ -74,7 +87,7 @@ const Header = () => {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  const handleCatalogMouseEnter = () => {
+  const handleArrowMouseEnter = () => {
     // Only show on hover for desktop (not on touch devices)
     if (canHover) {
       if (hoverTimeout) {
@@ -84,22 +97,30 @@ const Header = () => {
       // Faster response time for better UX
       const timeout = setTimeout(() => {
         setIsMegaOpen(true);
-      }, 100); // Reduced from 200ms to 100ms for faster response
+      }, 150);
       setHoverTimeout(timeout);
     }
   };
 
-  const handleCatalogMouseLeave = () => {
-    // Don't close immediately - allow time to move to menu
-    // If user enters menu area, handleMegaMenuMouseEnter will cancel any close
-    if (!isMegaOpen) {
-      // Menu wasn't open, so just clear any pending open
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-        setHoverTimeout(null);
-      }
+  const handleArrowMouseLeave = (e: React.MouseEvent) => {
+    // Check if we're moving to the menu or bridge area
+    const relatedTarget = e.relatedTarget as HTMLElement;
+    // If menu is open and we're moving downward (to menu), don't close
+    if (isMegaOpen) {
+      // Give a small delay to see if mouse enters menu area
+      // The menu's mouse enter will cancel this timeout
+      const timeout = setTimeout(() => {
+        // Only close if mouse didn't enter menu area
+        setIsMegaOpen(false);
+      }, 100);
+      setHoverTimeout(timeout);
+      return;
     }
-    // If menu is open, let the menu's mouse leave handler manage closing
+    // If menu isn't open yet, cancel the open
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
   };
 
   const handleMegaMenuMouseEnter = () => {
@@ -108,13 +129,28 @@ const Header = () => {
       clearTimeout(hoverTimeout);
       setHoverTimeout(null);
     }
+    // Ensure menu stays open - this is called when entering menu or bridge
+    setIsMegaOpen(true);
   };
 
-  const handleMegaMenuMouseLeave = () => {
-    // Close menu after leaving - small delay for smooth UX
+  const handleMegaMenuMouseLeave = (e: React.MouseEvent) => {
+    // Cancel any pending closes
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    // Check if we're moving back to the arrow
+    const relatedTarget = e.relatedTarget as Node;
+    if (arrowRef.current && (arrowRef.current.contains(relatedTarget) || arrowRef.current.isSameNode(relatedTarget))) {
+      // Moving back to arrow, don't close - arrow will keep it open
+      return;
+    }
+    // Close menu after leaving - delay to allow moving back to arrow
     const timeout = setTimeout(() => {
-      setIsMegaOpen(false);
-    }, 150);
+      // Double check we're not hovering over arrow or menu
+      if (!arrowRef.current?.matches(":hover")) {
+        setIsMegaOpen(false);
+      }
+    }, 250);
     setHoverTimeout(timeout);
   };
 
@@ -168,19 +204,33 @@ const Header = () => {
           <nav aria-label="Primary" className="hidden items-center gap-6 text-sm text-muted sm:flex">
             <div
               ref={catalogButtonRef}
-              className="relative group"
-              onMouseEnter={handleCatalogMouseEnter}
-              onMouseLeave={handleCatalogMouseLeave}
+              className="relative inline-flex items-center gap-1.5"
             >
               <Link
                 href="/catalog"
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface inline-flex items-center gap-1.5 ${
-                  isMegaOpen ? "text-primary" : ""
-                }`}
+                className="rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               >
                 Catalog
+              </Link>
+              <button
+                ref={arrowRef}
+                type="button"
+                onMouseEnter={handleArrowMouseEnter}
+                onMouseLeave={handleArrowMouseLeave}
+                onMouseMove={() => {
+                  // Keep menu open when hovering over arrow
+                  if (isMegaOpen && hoverTimeout) {
+                    clearTimeout(hoverTimeout);
+                    setHoverTimeout(null);
+                  }
+                }}
+                onClick={() => setIsMegaOpen((prev) => !prev)}
+                className="rounded-full p-2 -ml-1 text-muted hover:text-primary transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                aria-label="Toggle catalog menu"
+                aria-expanded={isMegaOpen}
+              >
                 <svg
-                  className={`h-4 w-4 transition-transform duration-300 ease-out ${isMegaOpen ? "rotate-180" : "group-hover:translate-y-0.5"}`}
+                  className={`h-4 w-4 transition-transform duration-300 ease-out ${isMegaOpen ? "rotate-180" : ""}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -188,7 +238,7 @@ const Header = () => {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-              </Link>
+              </button>
             </div>
             {NAV_ITEMS.map((item) => {
               const isAuctions = item.href === "/auctions";
@@ -230,27 +280,45 @@ const Header = () => {
           </button>
           {isMegaOpen && (
             <>
-              {/* Invisible bridge area to help with mouse movement from button to menu */}
+              {/* Invisible bridge area to help with mouse movement from arrow to menu */}
               <div
-                className="fixed left-0 right-0 z-[45] pointer-events-none"
+                className="fixed left-0 right-0 z-[45] pointer-events-auto"
                 style={{ 
                   top: `${headerRef.current?.offsetHeight || 100}px`,
-                  height: "8px"
+                  height: "16px"
                 }}
                 onMouseEnter={handleMegaMenuMouseEnter}
+                onMouseLeave={(e) => {
+                  // Don't close if moving back to arrow
+                  const relatedTarget = e.relatedTarget as Node;
+                  if (arrowRef.current && (arrowRef.current.contains(relatedTarget) || arrowRef.current.isSameNode(relatedTarget))) {
+                    return;
+                  }
+                  // Small delay to check if moving to menu
+                  const timeout = setTimeout(() => {
+                    handleMegaMenuMouseLeave(e);
+                  }, 50);
+                  if (hoverTimeout) clearTimeout(hoverTimeout);
+                  setHoverTimeout(timeout);
+                }}
               />
               <div
                 className="fixed inset-0 z-[45] bg-black/60 backdrop-blur-md backdrop-enter"
                 onClick={() => setIsMegaOpen(false)}
-                onMouseEnter={handleMegaMenuMouseEnter}
-                onMouseLeave={handleMegaMenuMouseLeave}
                 aria-hidden="true"
                 style={{ pointerEvents: "auto" }}
               />
               <div
-                className="pointer-events-none"
+                className="pointer-events-none relative z-[46]"
                 onMouseEnter={handleMegaMenuMouseEnter}
-                onMouseLeave={handleMegaMenuMouseLeave}
+                onMouseLeave={(e) => {
+                  // Check if moving back to arrow or bridge
+                  const relatedTarget = e.relatedTarget as Node;
+                  if (arrowRef.current && (arrowRef.current.contains(relatedTarget) || arrowRef.current.isSameNode(relatedTarget))) {
+                    return;
+                  }
+                  handleMegaMenuMouseLeave(e);
+                }}
               >
                 <div className="pointer-events-auto">
                   <CatalogMegaMenu
