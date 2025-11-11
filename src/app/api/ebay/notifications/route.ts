@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 
 // Verification token - should match what's configured in eBay dashboard
 const VERIFICATION_TOKEN = process.env.EBAY_VERIFICATION_TOKEN || "";
+
+// Endpoint URL - should match what's configured in eBay dashboard
+const ENDPOINT_URL = process.env.EBAY_NOTIFICATION_ENDPOINT_URL || "https://www.kivindustrial.com/api/ebay/notifications";
 
 // Handle CORS preflight requests
 export async function OPTIONS(request: NextRequest) {
@@ -28,43 +32,68 @@ export async function OPTIONS(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // eBay sends a verification challenge with query parameters
-    // The challenge_code parameter contains the verification code that must be echoed back
-    // This is eBay's way of verifying the endpoint is accessible and working
+    // The challenge_code parameter contains the verification code
     const challengeCode = request.nextUrl.searchParams.get("challenge_code");
 
-    // eBay requires the endpoint to return the challenge_code in the response body
-    // This is a simple echo-back mechanism - no authentication required for verification
     if (challengeCode) {
       console.log("eBay verification challenge received:", challengeCode);
-      // Return the challenge code as plain text in the response body
-      // Content-Type should be text/plain
-      // Status should be 200
-      // Must return exactly the challenge_code value - nothing else
-      return new NextResponse(challengeCode, {
-        status: 200,
-        headers: {
-          "Content-Type": "text/plain; charset=utf-8",
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-        },
-      });
+      
+      // eBay requires a specific challenge-response mechanism:
+      // 1. Concatenate: challenge_code + verificationToken + endpoint URL
+      // 2. Compute SHA-256 hash of the concatenated string
+      // 3. Return the hash in JSON format: { "challengeResponse": "hash" }
+      
+      if (!VERIFICATION_TOKEN) {
+        console.error("EBAY_VERIFICATION_TOKEN not configured");
+        return NextResponse.json(
+          { error: "Verification token not configured" },
+          { status: 500 }
+        );
+      }
+
+      // Concatenate challenge_code + verificationToken + endpoint URL
+      const concatenatedString = challengeCode + VERIFICATION_TOKEN + ENDPOINT_URL;
+      
+      // Compute SHA-256 hash (hexadecimal, not base64)
+      const hash = crypto.createHash("sha256").update(concatenatedString).digest("hex");
+      
+      console.log("Computed challenge response hash:", hash);
+      
+      // Return the hash in JSON format
+      return NextResponse.json(
+        { challengeResponse: hash },
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+          },
+        }
+      );
     }
 
     // If no challenge code, return a simple response to indicate endpoint is alive
     // This allows basic health checks
-    return new NextResponse("Endpoint is active", {
-      status: 200,
-      headers: {
-        "Content-Type": "text/plain",
-      },
-    });
+    return NextResponse.json(
+      { status: "ok", message: "Endpoint is active" },
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   } catch (error) {
     console.error("eBay notification verification error:", error);
-    return new NextResponse("Internal Server Error", {
-      status: 500,
-      headers: {
-        "Content-Type": "text/plain",
-      },
-    });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 }
 
