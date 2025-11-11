@@ -13,9 +13,8 @@ const slugify = (value: string) =>
     .replace(/(^-|-$)+/g, "");
 
 const NAV_ITEMS = [
-  { href: "/", label: "Home" },
-  { href: "/manufacturers", label: "Manufacturers" },
   { href: "/auctions", label: "Auctions" },
+  { href: "/manufacturers", label: "Manufacturers" },
   { href: "/#contact", label: "Contact" },
 ];
 
