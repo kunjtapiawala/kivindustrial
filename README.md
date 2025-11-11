@@ -19,19 +19,26 @@ npm run dev
 Open `http://localhost:3000` to view the site locally.
 
 ## Environment Variables
-Create a `.env.local` file with your email delivery credentials:
+Create a `.env.local` file with your email delivery credentials and eBay API credentials:
 
 ```
+# Email Configuration
 SMTP_HOST=your-smtp-host
 SMTP_PORT=587
 SMTP_USER=your-smtp-username
 SMTP_PASS=your-smtp-password
 CONTACT_SENDER_EMAIL=noreply@yourdomain.com
 CONTACT_RECIPIENT_EMAIL=your@email.com
+
+# eBay API Configuration (for Instant Quote feature)
+EBAY_APP_ID=your-ebay-app-id
+EBAY_API_ENV=sandbox
 ```
 
 - `CONTACT_SENDER_EMAIL` is the "from" address shown to recipients. If omitted, the app will fall back to `SMTP_USER`.
 - `CONTACT_RECIPIENT_EMAIL` is where sourcing requests are delivered.
+- `EBAY_APP_ID` is your eBay Application ID (Client ID). Get it from [eBay Developer Program](https://developer.ebay.com/my/keys).
+- `EBAY_API_ENV` can be `sandbox` (default) or `production`. Use sandbox for testing.
 
 Restart the dev server after adding environment variables.
 
