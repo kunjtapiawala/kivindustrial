@@ -9,6 +9,7 @@ type CatalogMegaMenuProps = {
   onClose: () => void;
   activeCategoryId: string;
   onSelectCategory: (categoryId: string) => void;
+  headerHeight?: number;
 };
 
 const PREVIEW_LIMIT = 10;
@@ -27,7 +28,7 @@ const chunkItems = (items: string[], chunkSize: number) => {
   return chunks;
 };
 
-const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory }: CatalogMegaMenuProps) => {
+const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory, headerHeight = 100 }: CatalogMegaMenuProps) => {
   const activeCategory = useMemo(
     () => catalogCategories.find((category) => category.id === activeCategoryId) ?? catalogCategories[0],
     [activeCategoryId],
@@ -46,8 +47,8 @@ const CatalogMegaMenu = ({ onClose, activeCategoryId, onSelectCategory }: Catalo
   };
 
   return (
-    <div className="absolute left-0 right-0 top-full z-40 hidden sm:block">
-      <div className="mx-auto mt-3 flex max-w-6xl rounded-3xl border border-white/10 bg-surface text-primary shadow-2xl shadow-black/20 ring-1 ring-white/5">
+    <div className="fixed left-0 right-0 z-[46] hidden sm:block px-4 sm:px-6" style={{ top: `${headerHeight}px` }}>
+      <div className="mx-auto flex max-w-6xl rounded-3xl border border-white/20 bg-surface/95 backdrop-blur-xl text-primary shadow-2xl shadow-black/70 ring-1 ring-white/10 transition-all duration-200">
         <aside
           className="relative w-72 overflow-y-auto border-r border-white/5 bg-surface/80 p-6 backdrop-blur"
           style={{ maxHeight: "70vh" }}

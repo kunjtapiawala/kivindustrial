@@ -139,11 +139,19 @@ const Header = () => {
             </div>
           </button>
           {isMegaOpen && (
-            <CatalogMegaMenu
-              onClose={() => setIsMegaOpen(false)}
-              activeCategoryId={activeCategoryId}
-              onSelectCategory={setActiveCategoryId}
-            />
+            <>
+              <div
+                className="fixed inset-0 z-[45] bg-black/60 backdrop-blur-md transition-opacity"
+                onClick={() => setIsMegaOpen(false)}
+                aria-hidden="true"
+              />
+              <CatalogMegaMenu
+                onClose={() => setIsMegaOpen(false)}
+                activeCategoryId={activeCategoryId}
+                onSelectCategory={setActiveCategoryId}
+                headerHeight={headerRef.current?.offsetHeight || 100}
+              />
+            </>
           )}
         </div>
       </div>
