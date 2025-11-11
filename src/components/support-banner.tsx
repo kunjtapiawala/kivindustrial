@@ -36,7 +36,7 @@ const SupportBanner = () => {
           <div className="relative inline-block">
             <div className="absolute -inset-1 rounded-full bg-background/30 blur-sm" />
             <p className="relative rounded-full border-2 border-background/40 bg-background/25 px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-background shadow-xl backdrop-blur-md">
-              If you need it, we have it
+              Minimize downtime, maximize savings
             </p>
           </div>
         </div>
