@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import CatalogMegaMenu from "./catalog-mega-menu";
 import SupportBanner from "./support-banner";
 import { catalogCategories } from "@/data/catalog";
 
@@ -20,176 +19,14 @@ const NAV_ITEMS = [
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMegaOpen, setIsMegaOpen] = useState(false);
-  const [activeCategoryId, setActiveCategoryId] = useState(catalogCategories[0]?.id ?? "");
   const [isMobileCatalogOpen, setIsMobileCatalogOpen] = useState(false);
   const [expandedMobileCategoryId, setExpandedMobileCategoryId] = useState<string | null>(null);
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [canHover, setCanHover] = useState(false);
 
   const headerRef = useRef<HTMLDivElement | null>(null);
-  const catalogButtonRef = useRef<HTMLDivElement | null>(null);
-  const arrowRef = useRef<HTMLButtonElement | null>(null);
+
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!isMegaOpen) {
-        return;
-      }
-      const target = event.target as Node;
-      // Don't close if clicking on arrow or catalog button area
-      if (
-        arrowRef.current &&
-        (arrowRef.current.contains(target) || arrowRef.current.isSameNode(target))
-      ) {
-        return;
-      }
-      if (
-        catalogButtonRef.current &&
-        catalogButtonRef.current.contains(target)
-      ) {
-        return;
-      }
-      // Close if clicking outside
-      if (
-        headerRef.current &&
-        !headerRef.current.contains(target)
-      ) {
-        setIsMegaOpen(false);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsMegaOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isMegaOpen]);
-
-  // Check if device supports hover (desktop)
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(hover: hover)");
-    setCanHover(mediaQuery.matches);
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setCanHover(e.matches);
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
-
-  const handleArrowMouseEnter = () => {
-    // Only show on hover for desktop (not on touch devices)
-    if (canHover) {
-      // Cancel any pending close
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-        setHoverTimeout(null);
-      }
-      // Faster response time for better UX
-      const timeout = setTimeout(() => {
-        setIsMegaOpen(true);
-      }, 200);
-      setHoverTimeout(timeout);
-    }
-  };
-
-  const handleArrowMouseLeave = (e: React.MouseEvent) => {
-    // Cancel any pending open if menu isn't open yet
-    if (!isMegaOpen) {
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-        setHoverTimeout(null);
-      }
-      return;
-    }
-    
-    // If menu is open, always give a delay before closing
-    // This prevents flickering when the arrow rotates or mouse moves slightly
-    const timeout = setTimeout(() => {
-      // Check if we're still in a safe area
-      const isOverArrow = arrowRef.current?.matches(":hover") || 
-                         (e.relatedTarget && arrowRef.current?.contains(e.relatedTarget as Node));
-      const isOverButton = catalogButtonRef.current?.matches(":hover") ||
-                          (e.relatedTarget && catalogButtonRef.current?.contains(e.relatedTarget as Node));
-      const menuElement = document.querySelector('[data-catalog-menu]');
-      const bridgeElement = document.querySelector('[data-catalog-bridge]');
-      const isOverMenu = menuElement?.matches(":hover") || 
-                        (e.relatedTarget && menuElement?.contains(e.relatedTarget as Node));
-      const isOverBridge = bridgeElement?.matches(":hover") ||
-                          (e.relatedTarget && bridgeElement?.contains(e.relatedTarget as Node));
-      
-      // Only close if we're definitely not in any safe area
-      if (!isOverArrow && !isOverButton && !isOverMenu && !isOverBridge && isMegaOpen) {
-        setIsMegaOpen(false);
-      }
-    }, 400); // Longer delay to prevent flickering
-    
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-    }
-    setHoverTimeout(timeout);
-  };
-
-  const handleMegaMenuMouseEnter = () => {
-    // Keep menu open when hovering over it - cancel any close timers
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-      setHoverTimeout(null);
-    }
-    // Ensure menu stays open - this is called when entering menu or bridge
-    setIsMegaOpen(true);
-  };
-
-  const handleMegaMenuMouseLeave = (e: React.MouseEvent) => {
-    // Cancel any pending closes
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-      setHoverTimeout(null);
-    }
-    
-    // Check where we're moving to
-    const relatedTarget = e.relatedTarget as HTMLElement;
-    
-    // Don't close if moving back to arrow or catalog button area
-    if (
-      relatedTarget &&
-      (
-        (arrowRef.current && (arrowRef.current.contains(relatedTarget) || arrowRef.current.isSameNode(relatedTarget))) ||
-        (catalogButtonRef.current && catalogButtonRef.current.contains(relatedTarget)) ||
-        relatedTarget.closest('[data-catalog-menu]') ||
-        relatedTarget.closest('[data-catalog-bridge]')
-      )
-    ) {
-      // Moving to a safe area, don't close
-      return;
-    }
-    
-    // Close menu after leaving - delay to allow moving back to arrow
-    const timeout = setTimeout(() => {
-      // Double check we're not in a safe area
-      if (!arrowRef.current?.matches(":hover") && !catalogButtonRef.current?.matches(":hover")) {
-        const menuElement = document.querySelector('[data-catalog-menu]');
-        const bridgeElement = document.querySelector('[data-catalog-bridge]');
-        if (!menuElement?.matches(":hover") && !bridgeElement?.matches(":hover")) {
-          setIsMegaOpen(false);
-        }
-      }
-    }, 300);
-    setHoverTimeout(timeout);
-  };
-
-  useEffect(() => {
-    if (isMegaOpen || isMenuOpen) {
+    if (isMenuOpen) {
       const scrollY = window.scrollY;
       document.body.style.position = "fixed";
       document.body.style.top = `-${scrollY}px`;
@@ -204,16 +41,7 @@ const Header = () => {
         window.scrollTo(0, scrollY);
       };
     }
-  }, [isMegaOpen, isMenuOpen]);
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-      }
-    };
-  }, [hoverTimeout]);
+  }, [isMenuOpen]);
 
   const handleToggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -236,46 +64,12 @@ const Header = () => {
             KIV Industrial Parts
           </Link>
           <nav aria-label="Primary" className="hidden items-center gap-6 text-sm text-muted sm:flex">
-            <div
-              ref={catalogButtonRef}
-              className="relative inline-flex items-center gap-0"
-              onMouseEnter={() => {
-                // Keep menu open when hovering anywhere in catalog button area
-                if (isMegaOpen && hoverTimeout) {
-                  clearTimeout(hoverTimeout);
-                  setHoverTimeout(null);
-                }
-              }}
+            <Link
+              href="/catalog"
+              className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
-              <Link
-                href="/catalog"
-                className="rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
-              >
-                Catalog
-              </Link>
-              <button
-                ref={arrowRef}
-                type="button"
-                onMouseEnter={handleArrowMouseEnter}
-                onMouseLeave={handleArrowMouseLeave}
-                onClick={() => setIsMegaOpen((prev) => !prev)}
-                className="rounded-full p-2 text-muted hover:text-primary transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface relative"
-                aria-label="Toggle catalog menu"
-                aria-expanded={isMegaOpen}
-                style={{ minWidth: '36px', minHeight: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >
-                <svg
-                  className={`h-4 w-4 absolute transition-transform duration-300 ease-out ${isMegaOpen ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  style={{ pointerEvents: 'none' }}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
+              Catalog
+            </Link>
             {NAV_ITEMS.map((item) => {
               const isAuctions = item.href === "/auctions";
               return (
@@ -314,42 +108,6 @@ const Header = () => {
               <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} aria-hidden="true" />
             </div>
           </button>
-          {isMegaOpen && (
-            <>
-              {/* Invisible bridge area to help with mouse movement from arrow to menu */}
-              <div
-                data-catalog-bridge
-                className="fixed left-0 right-0 z-[45] pointer-events-auto"
-                style={{ 
-                  top: `${headerRef.current?.offsetHeight || 100}px`,
-                  height: "20px"
-                }}
-                onMouseEnter={handleMegaMenuMouseEnter}
-                onMouseLeave={handleMegaMenuMouseLeave}
-              />
-              <div
-                className="fixed inset-0 z-[45] bg-black/60 backdrop-blur-md backdrop-enter"
-                onClick={() => setIsMegaOpen(false)}
-                aria-hidden="true"
-                style={{ pointerEvents: "auto" }}
-              />
-              <div
-                data-catalog-menu
-                className="pointer-events-none relative z-[46]"
-                onMouseEnter={handleMegaMenuMouseEnter}
-                onMouseLeave={handleMegaMenuMouseLeave}
-              >
-                <div className="pointer-events-auto">
-                  <CatalogMegaMenu
-                    onClose={() => setIsMegaOpen(false)}
-                    activeCategoryId={activeCategoryId}
-                    onSelectCategory={setActiveCategoryId}
-                    headerHeight={headerRef.current?.offsetHeight || 100}
-                  />
-                </div>
-              </div>
-            </>
-          )}
         </div>
       </div>
       {isMenuOpen && (
