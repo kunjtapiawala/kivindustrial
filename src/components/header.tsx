@@ -14,6 +14,7 @@ const slugify = (value: string) =>
 const NAV_ITEMS = [
   { href: "/auctions", label: "Auctions" },
   { href: "/manufacturers", label: "Manufacturers" },
+  { href: "/about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];
 

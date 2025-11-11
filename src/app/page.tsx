@@ -33,6 +33,9 @@ const Home = () => {
             <p className="rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-primary sm:max-w-lg">
               Due to demand, we are currently accepting sourcing orders of $2,500 USD or greater. Need support on a smaller project? Reach out and we will queue you as capacity opens.
             </p>
+            <p className="rounded-xl border border-accent/50 bg-accent/15 px-4 py-3 text-sm font-semibold text-accent sm:max-w-lg">
+              We will beat all quotes from reputable companies. Send us your quote and we will prove it.
+            </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href="#contact"
@@ -132,7 +135,7 @@ const Home = () => {
                 </li>
               </ul>
               <p>
-                Do not take our word for it - send the quote request and we will prove it with pricing and turnaround that beats the competition.
+                We will beat all quotes from reputable companies. Send us your quote request and we will prove it with pricing and turnaround that beats the competition.
               </p>
             </div>
           </div>

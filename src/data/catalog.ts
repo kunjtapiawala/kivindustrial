@@ -28,6 +28,8 @@ import { materialHandlingCategory } from "./catalog/material-handling";
 import { weldingEquipmentCategory } from "./catalog/welding-equipment";
 import { circuitBoardsCategory } from "./catalog/circuit-boards";
 import { aiPartsCategory } from "./catalog/ai-parts";
+import { manufacturingMachineryCategory } from "./catalog/manufacturing-machinery";
+import { packagingEquipmentCategory } from "./catalog/packaging-equipment";
 
 export type { CatalogCategory } from "./catalog/types";
 
@@ -60,5 +62,7 @@ export const catalogCategories: CatalogCategory[] = [
   weldingEquipmentCategory,
   circuitBoardsCategory,
   aiPartsCategory,
+  manufacturingMachineryCategory,
+  packagingEquipmentCategory,
 ];
 
