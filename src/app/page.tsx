@@ -28,7 +28,7 @@ const Home = () => {
               Source the industrial parts you need without the wait.
           </h1>
             <p className="text-base text-muted sm:max-w-xl">
-              KIV Industrial sources your parts from a network of trusted distributors and suppliers across the United States, giving you access to over 3 million parts. Most items ship out the same day your order is received and can be delivered the next day, with lead times our competitors can't compete with, because we understand the importance of minimizing downtime.
+              KIV Industrial connects you to a nationwide network of verified distributors and suppliers, giving you access to over 3 million in-stock industrial parts. Most orders ship the same day and arrive as soon as the next day—because we know every hour of downtime costs productivity. Our lead times set the industry standard, ensuring your operations never stop.
             </p>
             <p className="rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-primary sm:max-w-lg">
               Due to demand, we are currently accepting sourcing orders of $2,500 USD or greater. Need support on a smaller project? Reach out and we will queue you as capacity opens.
