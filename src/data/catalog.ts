@@ -27,6 +27,7 @@ import { bearingsSealsCategory } from "./catalog/bearings-seals";
 import { materialHandlingCategory } from "./catalog/material-handling";
 import { weldingEquipmentCategory } from "./catalog/welding-equipment";
 import { circuitBoardsCategory } from "./catalog/circuit-boards";
+import { aiPartsCategory } from "./catalog/ai-parts";
 
 export type { CatalogCategory } from "./catalog/types";
 
@@ -58,5 +59,6 @@ export const catalogCategories: CatalogCategory[] = [
   materialHandlingCategory,
   weldingEquipmentCategory,
   circuitBoardsCategory,
+  aiPartsCategory,
 ];
 
