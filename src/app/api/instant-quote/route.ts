@@ -117,12 +117,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Check for eBay API errors in the response body
-    if (data.findItemsAdvancedResponse?.[0]?.errorMessage) {
-      const errorMsg = data.findItemsAdvancedResponse[0].errorMessage[0];
-      const errorDetails = errorMsg.error?.[0];
+    if (data.findItemsAdvancedResponse?.[0]?.errorMessage || data.errorMessage) {
+      const errorMsg = data.findItemsAdvancedResponse?.[0]?.errorMessage?.[0] || data.errorMessage?.[0];
+      const errorDetails = errorMsg?.error?.[0];
       const errorMessage = errorDetails?.message?.[0] || "Unknown eBay API error";
       const errorId = errorDetails?.errorId?.[0] || "Unknown";
+      const errorDomain = errorDetails?.domain?.[0] || "";
+      const errorSubdomain = errorDetails?.subdomain?.[0] || "";
+      
       console.error("eBay API error response:", JSON.stringify(errorMsg, null, 2));
+      
+      // Handle rate limiting errors with user-friendly message
+      if (errorId === "10001" || errorSubdomain === "RateLimiter") {
+        throw new Error("eBay API rate limit exceeded. Please try again in a few minutes.");
+      }
+      
       throw new Error(`eBay API error (${errorId}): ${errorMessage}`);
     }
 
