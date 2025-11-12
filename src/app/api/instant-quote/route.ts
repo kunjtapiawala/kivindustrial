@@ -98,9 +98,20 @@ export async function POST(request: NextRequest) {
           const errorDetails = errorMsg?.error?.[0];
           const errorMessage = errorDetails?.message?.[0] || "Unknown eBay API error";
           const errorId = errorDetails?.errorId?.[0] || "Unknown";
+          const errorSubdomain = errorDetails?.subdomain?.[0] || "";
+          
+          // Handle rate limiting errors with user-friendly message
+          if (errorId === "10001" || errorSubdomain === "RateLimiter") {
+            throw new Error("eBay API rate limit exceeded. Please try again in a few minutes.");
+          }
+          
           throw new Error(`eBay API error (${errorId}): ${errorMessage}`);
         }
       } catch (parseError) {
+        // If it's already our custom error, re-throw it
+        if (parseError instanceof Error && parseError.message.includes("rate limit")) {
+          throw parseError;
+        }
         // If parsing fails, use the raw error text
       }
       
