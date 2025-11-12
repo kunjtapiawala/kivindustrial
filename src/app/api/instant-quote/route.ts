@@ -78,14 +78,43 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Get response text first to handle both JSON and text errors
+    const responseText = await response.text();
+    
     // Check for HTTP errors
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("eBay API HTTP error:", response.status, response.statusText, errorText);
-      throw new Error(`eBay API error (${response.status}): ${response.statusText}`);
+      console.error("eBay API HTTP error:", {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: responseText,
+      });
+      
+      // Try to parse as JSON to get detailed error message
+      try {
+        const errorData = JSON.parse(responseText);
+        if (errorData.errorMessage || errorData.findItemsAdvancedResponse?.[0]?.errorMessage) {
+          const errorMsg = errorData.findItemsAdvancedResponse?.[0]?.errorMessage?.[0] || errorData.errorMessage?.[0];
+          const errorDetails = errorMsg?.error?.[0];
+          const errorMessage = errorDetails?.message?.[0] || "Unknown eBay API error";
+          const errorId = errorDetails?.errorId?.[0] || "Unknown";
+          throw new Error(`eBay API error (${errorId}): ${errorMessage}`);
+        }
+      } catch (parseError) {
+        // If parsing fails, use the raw error text
+      }
+      
+      throw new Error(`eBay API error (${response.status}): ${response.statusText}. ${responseText.substring(0, 200)}`);
     }
 
-    const data = await response.json();
+    // Parse JSON response
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error("Failed to parse eBay API response:", responseText);
+      throw new Error("Invalid response from eBay API");
+    }
 
     // Check for eBay API errors in the response body
     if (data.findItemsAdvancedResponse?.[0]?.errorMessage) {
