@@ -28,8 +28,10 @@ export async function POST(request: NextRequest) {
     // eBay Finding API only requires App ID (Client ID)
     // Get your App ID from: https://developer.ebay.com/my/keys
     const EBAY_APP_ID = process.env.EBAY_APP_ID;
+    const EBAY_API_ENV = process.env.EBAY_API_ENV || "production";
 
     if (!EBAY_APP_ID) {
+      console.error("EBAY_APP_ID not configured");
       return NextResponse.json(
         {
           success: false,
@@ -40,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     // eBay Finding API endpoint (sandbox or production)
-    const ebayApiUrl = process.env.EBAY_API_ENV === "production"
+    const ebayApiUrl = EBAY_API_ENV === "production"
       ? "https://svcs.ebay.com/services/search/FindingService/v1"
       : "https://svcs.sandbox.ebay.com/services/search/FindingService/v1";
 
@@ -61,13 +63,39 @@ export async function POST(request: NextRequest) {
       "paginationInput.entriesPerPage": "20",
     });
 
-    const response = await fetch(`${ebayApiUrl}?${params.toString()}`);
+    const apiUrl = `${ebayApiUrl}?${params.toString()}`;
+    console.log("eBay API request:", {
+      environment: EBAY_API_ENV,
+      appId: EBAY_APP_ID.substring(0, 20) + "...",
+      searchQuery,
+      conditionId,
+      url: apiUrl.substring(0, 100) + "...",
+    });
 
+    const response = await fetch(apiUrl, {
+      headers: {
+        "User-Agent": "KIV-Industrial/1.0",
+      },
+    });
+
+    // Check for HTTP errors
     if (!response.ok) {
-      throw new Error(`eBay API error: ${response.statusText}`);
+      const errorText = await response.text();
+      console.error("eBay API HTTP error:", response.status, response.statusText, errorText);
+      throw new Error(`eBay API error (${response.status}): ${response.statusText}`);
     }
 
     const data = await response.json();
+
+    // Check for eBay API errors in the response body
+    if (data.findItemsAdvancedResponse?.[0]?.errorMessage) {
+      const errorMsg = data.findItemsAdvancedResponse[0].errorMessage[0];
+      const errorDetails = errorMsg.error?.[0];
+      const errorMessage = errorDetails?.message?.[0] || "Unknown eBay API error";
+      const errorId = errorDetails?.errorId?.[0] || "Unknown";
+      console.error("eBay API error response:", JSON.stringify(errorMsg, null, 2));
+      throw new Error(`eBay API error (${errorId}): ${errorMessage}`);
+    }
 
     // Parse eBay API response
     const items = data.findItemsAdvancedResponse?.[0]?.searchResult?.[0]?.item || [];
